@@ -1,0 +1,34 @@
+# syntax=docker/dockerfile:1.7
+FROM python:3.11-slim AS builder
+
+ENV VIRTUAL_ENV=/opt/venv \
+    PATH=/opt/venv/bin:$PATH \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_NO_CACHE_DIR=1
+
+RUN python -m venv "$VIRTUAL_ENV"
+COPY requirements-worker.txt /tmp/requirements-worker.txt
+RUN pip install --only-binary=:all: -r /tmp/requirements-worker.txt \
+ && pip install --index-url https://download.pytorch.org/whl/cpu torch==2.5.1+cpu
+
+FROM python:3.11-slim AS runtime
+
+ENV VIRTUAL_ENV=/opt/venv \
+    PATH=/opt/venv/bin:$PATH \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    TOKENIZERS_PARALLELISM=false \
+    HF_HOME=/var/cache/huggingface
+
+RUN groupadd --gid 10001 app \
+ && useradd --uid 10001 --gid app --create-home --home-dir /app app \
+ && mkdir -p "$HF_HOME" /models \
+ && chown -R app:app "$HF_HOME" /models
+
+COPY --from=builder /opt/venv /opt/venv
+COPY --chown=app:app inference_worker.py /app/inference_worker.py
+
+WORKDIR /app
+USER 10001:10001
+
+ENTRYPOINT ["python", "inference_worker.py"]

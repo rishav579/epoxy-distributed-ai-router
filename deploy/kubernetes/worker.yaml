@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inference-worker
+  labels:
+    app.kubernetes.io/name: inference-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: inference-worker
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: inference-worker
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /metrics
+        prometheus.io/port: "8001"
+    spec:
+      terminationGracePeriodSeconds: 90
+      automountServiceAccountToken: false
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: worker
+          image: registry.example.com/inference-worker:sha-REPLACE_ME
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: metrics
+              containerPort: 8001
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: inference-secrets
+                  key: database-url
+            - name: AMQP_URL
+              valueFrom:
+                secretKeyRef:
+                  name: inference-secrets
+                  key: amqp-url
+            - name: INFERENCE_QUEUE
+              value: inference.requests
+            - name: LOCAL_MODEL_REGISTRY_DIR
+              value: /models/current
+            - name: NUM_LABELS
+              value: "2"
+          volumeMounts:
+            - name: model-registry
+              mountPath: /models
+              readOnly: true
+            - name: hf-cache
+              mountPath: /var/cache/huggingface
+          resources:
+            requests:
+              cpu: "1"
+              memory: 2Gi
+            limits:
+              cpu: "2"
+              memory: 4Gi
+          readinessProbe:
+            tcpSocket:
+              port: metrics
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: metrics
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 10001
+      volumes:
+        - name: model-registry
+          persistentVolumeClaim:
+            claimName: inference-model-registry
+        - name: hf-cache
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inference-worker-metrics
+  labels:
+    app.kubernetes.io/name: inference-worker
+spec:
+  clusterIP: None
+  selector:
+    app.kubernetes.io/name: inference-worker
+  ports:
+    - name: metrics
+      port: 8001
+      targetPort: metrics

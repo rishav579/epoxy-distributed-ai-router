@@ -1,0 +1,70 @@
+# Python virtual environments and packaging output
+.venv/
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Python bytecode and local caches
+__pycache__/
+*.py[cod]
+*$py.class
+.hypothesis/
+
+# PyTorch / LoRA / Hugging Face model artifacts (large and reproducible)
+outputs/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+hf_cache/
+.cache/huggingface/
+
+# Weights & Biases local/offline runs
+wandb/
+
+# Local E2E logs and generated benchmark data
+.local-e2e-logs/
+benchmark_dataset.csv
+*.log
+
+# Environment files and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+
+# Terraform state, plans, provider/plugin directories, and local overrides
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+*.tfvars
+*.tfvars.json
+!*.tfvars.example
+
+# Terraform provider lock file is intentionally tracked when generated
+# (do not ignore .terraform.lock.hcl)
+
+# Docker and local tooling
+.dockerignore.bak
+.DS_Store
+Thumbs.db
+
+# Editors and operating-system metadata
+.idea/
+.vscode/
+*.swp
+*.swo
+*~

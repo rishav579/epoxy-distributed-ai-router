@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inference-gateway
+  labels:
+    app.kubernetes.io/name: inference-gateway
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: inference-gateway
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: inference-gateway
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /metrics
+        prometheus.io/port: "8000"
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: gateway
+          image: registry.example.com/inference-gateway:sha-REPLACE_ME
+          imagePullPolicy: IfNotPresent
+          command: ["uvicorn", "inference_gateway:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
+          ports:
+            - name: http
+              containerPort: 8000
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: inference-secrets
+                  key: database-url
+            - name: AMQP_URL
+              valueFrom:
+                secretKeyRef:
+                  name: inference-secrets
+                  key: amqp-url
+            - name: INFERENCE_QUEUE
+              value: inference.requests
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 512Mi
+          startupProbe:
+            tcpSocket:
+              port: http
+            failureThreshold: 30
+            periodSeconds: 2
+          readinessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 10
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 10001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inference-gateway
+  labels:
+    app.kubernetes.io/name: inference-gateway
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: inference-gateway
+  ports:
+    - name: http
+      port: 80
+      targetPort: http

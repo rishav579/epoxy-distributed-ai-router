@@ -1,0 +1,16 @@
+# syntax=docker/dockerfile:1.7
+FROM python:3.11-slim AS builder
+ENV VIRTUAL_ENV=/opt/venv PATH=/opt/venv/bin:$PATH PIP_DISABLE_PIP_VERSION_CHECK=1 PIP_NO_CACHE_DIR=1
+RUN python -m venv "$VIRTUAL_ENV"
+COPY requirements-gateway.txt /tmp/requirements-gateway.txt
+RUN pip install --only-binary=:all: -r /tmp/requirements-gateway.txt
+
+FROM python:3.11-slim AS runtime
+ENV VIRTUAL_ENV=/opt/venv PATH=/opt/venv/bin:$PATH PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+RUN groupadd --gid 10001 app && useradd --uid 10001 --gid app --create-home --home-dir /app app
+COPY --from=builder /opt/venv /opt/venv
+COPY --chown=app:app inference_gateway.py /app/inference_gateway.py
+WORKDIR /app
+USER 10001:10001
+EXPOSE 8000
+ENTRYPOINT ["uvicorn", "inference_gateway:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]

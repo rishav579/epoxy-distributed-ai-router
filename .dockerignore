@@ -1,0 +1,12 @@
+.git
+.github
+.venv
+__pycache__
+*.pyc
+*.log
+wandb
+outputs
+benchmark_dataset.csv
+benchmark_report.md
+deploy
+tests
