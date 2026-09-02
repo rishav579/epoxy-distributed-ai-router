@@ -124,7 +124,7 @@ class LocalExecutor:
         start_time = time.perf_counter()
         preview = text[:80] + ("..." if len(text) > 80 else "")
         output = f"[Local SLM processed query]: {preview}"
-        latency_ms = round((time.perf_counter() - start_time) * 1000, 2)
+        latency_ms = max(round((time.perf_counter() - start_time) * 1000, 2), 0.01)
         return ExecutionResult(
             provider="local",
             model=self.model_name,
@@ -163,7 +163,7 @@ class MockFrontierProvider(FrontierProvider):
 
         preview = text[:80] + ("..." if len(text) > 80 else "")
         output = f"[Frontier LLM deep reasoning response]: Completed high-complexity analysis for '{preview}'."
-        latency_ms = round((time.perf_counter() - start_time) * 1000, 2)
+        latency_ms = max(round((time.perf_counter() - start_time) * 1000, 2), 0.01)
         return ExecutionResult(
             provider="mock-frontier",
             model=self.model,

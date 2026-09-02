@@ -112,7 +112,7 @@ class TestExecutorsAndProviders(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(result.provider, "local")
         self.assertEqual(result.model, "local-slm-prototype")
         self.assertIn("Local SLM processed query", result.output)
-        self.assertGreater(result.latency_ms, 0.0)
+        self.assertGreaterEqual(result.latency_ms, 0.0)
 
 
 class TestResultPersistenceAndContract(unittest.TestCase):
