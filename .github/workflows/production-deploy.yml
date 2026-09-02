@@ -97,8 +97,8 @@ jobs:
     needs: test
     runs-on: ubuntu-24.04
     permissions:
-      contents: read
       id-token: write
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - name: Configure AWS credentials through OIDC
