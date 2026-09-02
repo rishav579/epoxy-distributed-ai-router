@@ -1,5 +1,401 @@
-﻿text,label
-This product is excellent,1
-I hated the customer support,0
-Very happy with the service,1
-The item arrived damaged,0
+text,label
+What is the capital city of Australia?,0
+What HTTP status code represents 'Forbidden'?,0
+What chemical symbol represents potassium on the periodic table?,0
+Who wrote the novel 'Pride and Prejudice'?,0
+What is the speed of light in vacuum rounded to the nearest integer in km/s?,0
+"In Python, what built-in function returns the length of a sequence?",0
+Which planet in our solar system is known as the Red Planet?,0
+What year did the Apollo 11 moon landing occur?,0
+What is the default TCP port number for HTTPS traffic?,0
+What does the CPU acronym stand for in computer science?,0
+What is the boiling point of water in Celsius at standard atmospheric pressure?,0
+How many bits are in a single standard byte?,0
+Which SQL keyword is used to retrieve unique distinct rows from a table?,0
+What is the primary currency used in Japan?,0
+Name the largest ocean on Earth by surface area.,0
+What does DNS stand for in computer networking?,0
+What is the square root of 144?,0
+What is 15 percent of 80?,0
+Which organ in the human body produces insulin?,0
+What is the chemical formula for carbon dioxide?,0
+How many days are there in a leap year?,0
+What is the opposite of the word 'transparent'?,0
+Convert 48 inches into feet.,0
+What programming language is primarily used for styling web pages?,0
+What is the past tense of the irregular verb 'begin'?,0
+Is 97 a prime number?,0
+What does HTML stand for?,0
+What is the freezing point of water in Fahrenheit?,0
+Which continent is Egypt located on?,0
+What is the primary gas found in Earth's atmosphere?,0
+How many millimeters are in one meter?,0
+What is the default port for DNS queries?,0
+What command is used in git to view commit history?,0
+What is the binary representation of decimal number 10?,0
+Which company created the Go programming language?,0
+What does URL stand for?,0
+What is the tallest mountain on Earth above sea level?,0
+How many centimeters are in an inch?,0
+What is the currency of the United Kingdom?,0
+Which planet is closest to the Sun?,0
+Correct grammatical errors in: She do not has the required permissions to access files.,0
+Fix spelling and punctuation in: they was going to the park yesterday afternoon,0
+Correct subject-verb agreement in: The team of developers are releasing the patch tonight.,0
+Fix grammar in: I seen that movie last weekend with my colleagues.,0
+Correct this sentence: Me and him decided to refactor the database connector.,0
+Fix typos and punctuation: Please send the reprot to alice by friday morning,0
+Correct tense consistency in: He starts the server and then checked the response logs.,0
+Fix grammatical mistakes in: There is many reasons why the test failed.,0
+Correct this headline: New features makes application faster for all user.,0
+Fix spelling in: The implimentation was sucsessful and tested throughly.,0
+Correct grammar in: Neither the manager nor the engineers was present at the call.,0
+Fix pronoun usage in: Everyone should submit their timesheets before them leave.,0
+Correct punctuation in: However we must proceed with caution,0
+Fix run-on sentence: The deploy completed the pod restarted traffic resumed normally.,0
+Correct grammar: The data shows that user engagement have dropped significantly.,0
+Fix typos in: Conected to redis server on local host port 6379.,0
+Correct sentence structure: Although it rained but we continued the outdoor benchmark.,0
+Fix spelling in: We need to update the documantation before releese.,0
+Correct grammar: Each of the servers are running the updated kernel.,0
+Fix typo in: The api returned a internal server erro.,0
+Correct: He don't know where the config file is located.,0
+Fix spelling: Please confurm your email adress to proced.,0
+Correct grammar: The list of items were sent to the customer.,0
+Fix typo: Recieved webhook notification from stripe gateway.,0
+Correct syntax: The user whom called yesterday requested an invoice.,0
+"Summarize this customer chat transcript in 10 words or less: User cannot log in, password reset link expired.",0
+Give a 1-sentence TL;DR of this release note about Python 3.12 syntax changes.,0
+Condense this 2-paragraph email about office reopening into a single sentence.,0
+"Provide a one-phrase summary of the following customer review: Great food, slow seating.",0
+Summarize this Git commit message into a 5-word headline: Fix off-by-one index in pagination cursor.,0
+Give a brief synopsis of the following daily standup update.,0
+Summarize the main takeaway from this memo regarding Q3 travel expense budgets.,0
+Write a 1-sentence abstract for this short blog post on CSS grid layout.,0
+Extract the core message of this team announcement in under 15 words.,0
+Reduce this product paragraph down to its single most important benefit.,0
+What is the single sentence summary of this return policy update?,0
+Provide a quick digest of this news bulletin regarding regional rainfall.,0
+Condense this feedback note: The UI looks clean but export to CSV is broken.,0
+Summarize this change log entry: Added dark mode toggle in account settings.,0
+Give a 5-word summary of this IT maintenance window alert.,0
+State the primary finding of this survey response in one concise sentence.,0
+Summarize this SMS alert: Your package has arrived at locker 42.,0
+Extract all email addresses mentioned in this text: Contact alice@work.com or bob.dev@co.org.,0
+Extract the transaction amount and currency code from: Paid EUR 149.50 via Visa debit.,0
+"Find and list the postal ZIP code from this address: 742 Evergreen Terrace, Springfield, OR 97477.",0
+"Extract the flight number, departure airport, and arrival airport from this itinerary string.",0
+Find all IPv4 addresses in this firewall log snippet: DROP 192.168.1.100 -> 10.0.0.1 on port 22.,0
+Extract the tracking number from this SMS: Order SHP-9812440 has left the sorting facility.,0
+"List the three ingredients mentioned in this sentence: Flour, sea salt, and extra virgin olive oil.",0
+Extract the timestamp and HTTP status code from this Apache log line.,0
+Pull out the discount coupon code mentioned in this marketing newsletter.,0
+Extract the author name and publication year from this citation: Knuth (1984).,0
+Identify the license plate number mentioned in this traffic violation report.,0
+Find the customer account number in: ACCT# 8841-0923 renewed on Monday.,0
+Extract the warranty expiration date from this equipment receipt.,0
+List the phone numbers found in this signature block.,0
+Extract the UUID string present in this error trace.,0
+Parse the git branch name from this webhook payload snippet.,0
+Extract the employee ID number from this onboarding checklist.,0
+"Classify the sentiment of this review as positive, neutral, or negative: The delivery was right on time.",0
+Is this incoming email spam or ham: Congratulations! You have won a free vacation voucher!,0
+"Assign a ticket category (Billing, Tech, or General) to: My credit card was charged twice this month.",0
+"Classify the language of this sentence: Bonjour tout le monde, comment allez-vous aujourd'hui?",0
+"Classify this headline as Sports, Politics, or Business: Central Bank increases interest rates by 25 bps.",0
+Determine if this question is technical or billing-related: Where do I update my VAT tax identifier?,0
+"Classify this issue urgency as Low, Medium, or Critical: Our primary production database is unreachable.",0
+"Is this log line an INFO, WARNING, or ERROR message: [WARN] Connection pool exhausted, retrying.",0
+Classify the intent of this query: cancel my subscription immediately.,0
+Determine if this feedback is constructive or abusive: You should allow CSV exports from this table.,0
+Classify this comment as bug report or feature request: Please add a button to export charts as SVG.,0
+Is this user utterance a statement or a question: The server crashed three times today.,0
+"Categorize this expense entry: Office supplies, travel, or meals and entertainment.",0
+"Classify this user tone: frustrated, satisfied, or indifferent.",0
+Identify whether this text is written in first-person or third-person perspective.,0
+Is this medical query seeking emergency care or routine general advice?,0
+Classify the severity of this network alert: Packet loss exceeded 15 percent on core router.,0
+Convert this timestamp from ISO 8601 to Unix epoch integer seconds: 2026-09-02T10:00:00Z.,0
+Format this unformatted phone number as (XXX) XXX-XXXX: 5550192834.,0
+Convert this raw markdown table into a CSV formatted string.,0
+Format this JSON string with 2-space indentation and sorted dictionary keys.,0
+Convert 68 degrees Fahrenheit to Celsius.,0
+Format this floating point number to exactly two decimal places with commas: 1245098.3491.,0
+Convert this snake_case variable name to camelCase: user_account_balance_cents.,0
+Transform this comma-separated string into a JSON array of strings.,0
+"Format this date string 'March 15, 2024' into YYYY-MM-DD format.",0
+Convert this 24-hour time 19:45 to 12-hour format with AM/PM.,0
+Convert 500 megabytes into equivalent gigabytes.,0
+Format this git commit hash into its 7-character abbreviated short SHA: 8a4b3c2d1e0f9a8b.,0
+Turn this list of names into an alphabetical markdown bullet list.,0
+Convert this hexadecimal color code #FF5733 to RGB decimal values.,0
+"From this Docker Compose file: 'services: db: image: postgres:15-alpine ports: - 5432:5432 environment: POSTGRES_DB: app POSTGRES_USER: admin POSTGRES_PASSWORD: secret_password volumes: - pgdata:/var/lib/postgresql/data redis: image: redis:7-alpine ports: - 6379:6379 volumes: pgdata:', what port is exposed for the Redis service?",0
+"Here is a detailed system configuration file: server.host=0.0.0.0, server.port=8080, logging.level=INFO, database.max_pool_size=20, database.connection_timeout_ms=5000, metrics.enabled=true, metrics.interval_seconds=60, cache.ttl_seconds=3600. Extract the value configured for database.max_pool_size.",0
+"In this 20-line nginx configuration snippet containing multiple upstream blocks, proxy_pass directives, SSL certificate definitions, and buffer settings: what is the server_name configured on port 443?",0
+"Below is an excerpt from an infrastructure audit report covering 15 regional datacenters, compliance certifications, power redundancy tiers, and network transit providers. Extract the primary telecom carrier named for the Dublin facility.",0
+"From this detailed JSON payload representing an e-commerce order: '{""order_id"":""ord_998124"",""customer"":{""id"":""c_102"",""name"":""Jane Doe"",""email"":""jane@test.org""},""items"":[{""sku"":""BK-10"",""qty"":2,""price"":19.99},{""sku"":""CD-04"",""qty"":1,""price"":9.99}],""shipping"":{""method"":""express"",""cost"":12.50},""total"":52.47}', what is the customer's email address?",0
+"Given this detailed AWS CloudWatch log stream excerpt with 10 timestamps, thread IDs, log levels, and stack traces: what is the HTTP method of the request recorded at 14:02:11 UTC?",0
+"Read this detailed 400-word software license agreement describing warranty disclaimers, liability limitations, derivative works, and redistribution rights. What jurisdiction's governing law is specified in Section 9?",0
+"Here is a multi-step continuous integration pipeline YAML configuration specifying linting stages, Docker image builds, integration tests, Snyk vulnerability scans, and staging deployments. What Docker image tag is used in the build step?",0
+"From this detailed database migration script creating 6 tables, 12 indexes, and 4 trigger functions: what is the exact name of the table created with the primary key 'tenant_id'?",0
+"In this lengthy Kubernetes Helm values.yaml file defining resource limits, autoscaling flags, ingress annotations, and volume mounts: what is the memory limit specified for the web container?",0
+Extract the error code number from this verbose 25-line Java stack trace: java.sql.SQLException: Connection refused with vendor error code 1045 on user admin.,0
+"Here is a long CSV snippet containing 15 rows of employee attendance data with columns Name, Department, Date, CheckIn, CheckOut, Status. What time did Robert check in on Monday?",0
+"From this detailed Prometheus metrics scrape output listing 50 different gauge, counter, and histogram values: what is the current value of the metric 'process_open_fds'?",0
+"In this 10-paragraph customer satisfaction report detailing regional quarterly feedback across Europe, Asia, and the Americas: what percentage of respondents reported being highly satisfied in Germany?",0
+"Read this multi-tenant OAuth2 token payload containing issuer, subject, audience, expiration, issued-at, scopes, and custom tenant claims. Extract the expiration timestamp integer.",0
+"Here is an extensive Terraform plan output creating 14 AWS resources including VPC subnets, NAT gateways, security groups, and route tables. What CIDR block is assigned to the private subnet in us-east-1a?",0
+"From this detailed server access log snippet: '192.168.1.45 - - [02/Sep/2026:10:14:22 +0000] ""GET /api/v2/users/991/profile HTTP/1.1"" 200 4521 ""https://app.com"" ""Mozilla/5.0"" 142ms', how many milliseconds did the request take to process?",0
+"Below is a long markdown specification describing API authentication, rate limits, pagination query parameters, and error envelopes. What is the maximum page size allowed by the pagination query parameter?",0
+"In this multi-line Envoy proxy configuration snippet defining clusters, endpoints, TLS contexts, and circuit breakers: what is the connect_timeout specified for the payment_cluster?",0
+"From this lengthy Git commit log spanning 8 commits with authors, dates, commit hashes, and multi-line descriptions: extract the commit hash of the commit made by Sarah on Tuesday.",0
+"Here is a detailed 300-word corporate security policy regarding password complexity, multi-factor authentication, session timeouts, and device encryption. How many characters is the minimum required password length?",0
+From this raw XML response containing 30 nested tags of product inventory from multiple warehouses: what is the quantity in stock for product SKU 'WDG-002'?,0
+"In this detailed GraphQL schema definition with 10 types, 4 interfaces, and 20 field resolvers: what is the return type of the 'getUserProfile' query?",0
+Read this multi-page incident timeline log with minute-by-minute entries from 03:00 to 07:30 UTC. At what exact time did the incident commander declare the service fully restored?,0
+From this lengthy crontab configuration with 12 scheduled jobs and environment variables: how often does the database vacuum script execute?,0
+"In this detailed TLS certificate dump showing issuer, subject, validity dates, SAN domains, and public key algorithm: what is the certificate expiration date?",0
+Below is an excerpt from a software bill of materials (SBOM) listing 40 open-source dependencies and their licenses. What version of the library 'pydantic' is specified?,0
+"Extract the transaction reference number from this lengthy payment gateway webhook event containing customer details, billing address, card fingerprints, and fraud evaluation scores.",0
+"In this lengthy Kubernetes cluster node description with system info, capacity, allocatable resources, and node conditions: how many CPU cores are listed under Capacity?",0
+From this verbose Ansible playbook executing 15 tasks across multiple server groups: what is the name of the destination directory where the template file is copied?,0
+"Here is a detailed 4-paragraph release retrospective discussing sprint velocity, blockers, completed user stories, and carry-over tickets. How many story points were completed during the sprint?",0
+"From this verbose curl output containing request headers, SSL handshake details, response headers, and timing metrics: what is the value of the 'cf-ray' header?",0
+"In this detailed Apache Kafka topic configuration output showing partition count, replication factor, retention bytes, and min in-sync replicas: what is the replication factor?",0
+"Extract the host IP address from this detailed network route table output displaying interfaces, gateways, netmasks, and metric flags.",0
+"Below is a 20-line YAML document configuring OpenTelemetry collectors, receivers, processors, and exporters. What port is the OTLP gRPC receiver listening on?",0
+"From this detailed database table statistics report showing table name, live tuples, dead tuples, last vacuum, and index scan count: what is the count of dead tuples for the 'orders' table?",0
+"In this lengthy software bug report containing system environment, reproduction steps, expected results, actual results, and logs: what browser version was reported by the user?",0
+"Read this multi-stanza logstash configuration file defining beats inputs, grok filters, and elasticsearch outputs. What index name pattern is specified in the elasticsearch output?",0
+From this detailed audit log recording 10 user permission changes in an admin console: which admin user revoked permissions for user 'dev_42'?,0
+"In this verbose Redis INFO output showing server info, clients, memory, persistence, and replication stats: what is the value of 'used_memory_human'?",0
+Extract the package download URL from this lengthy pip install debug log containing wheel metadata and hash verification steps.,0
+"From this detailed hardware inventory report listing rack numbers, server models, CPU models, RAM sizes, and disk drives: how much RAM is installed in server 'rack2-node4'?",0
+"In this verbose pytest test execution report listing 80 passed tests, 2 skipped tests, and 1 failed test: what is the name of the single failed test function?",0
+Read this multi-paragraph announcement regarding new company health insurance benefits and wellness stipends. What is the annual maximum wellness reimbursement amount?,0
+"From this lengthy syslog file recording SSH login attempts, daemon restarts, and firewall events: what username was used in the failed login attempt at 04:12:01?",0
+"In this detailed PostgreSQL EXPLAIN (ANALYZE, BUFFERS) query plan spanning 25 lines: what is the total execution time reported in milliseconds at the bottom of the plan?",0
+Extract the DNS nameserver IP address from this detailed /etc/resolv.conf and network manager status output.,0
+"From this lengthy npm package.json file with 30 dependencies, scripts, and repository metadata: what is the start script command defined under 'scripts'?",0
+"In this detailed AWS IAM role policy document containing 5 statements with conditions, resources, and action lists: what is the Sid of the statement allowing S3 GetObject?",0
+Read this detailed 200-word product warranty description for industrial power supplies. How many years is the manufacturer replacement warranty valid?,0
+"From this verbose HTTP/2 connection debug trace with frame types, stream IDs, and window update frames: what is the stream ID of the initial HEADERS frame?",0
+"In this detailed Elasticsearch cluster health JSON response with status, node counts, active primary shards, and unassigned shards: what is the cluster status ('green', 'yellow', or 'red')?",0
+Extract the webhook destination URL from this detailed Stripe customer subscription updated event payload.,0
+From this lengthy Git diff output modifying 8 files across frontend and backend: which specific file had lines removed in the 'utils' folder?,0
+"In this detailed RabbitMQ queue statistics table showing queue name, messages ready, messages unacknowledged, and consumer count: how many consumers are active on queue 'task.queue'?",0
+Read this lengthy 3-paragraph email from IT support explaining VPN troubleshooting steps and DNS cache flushing commands. What command is recommended to flush DNS on macOS?,0
+"From this detailed Kubernetes pod description showing container statuses, exit codes, restart counts, and volume mounts: what was the termination exit code of the init container?",0
+"In this verbose systemd service unit file with Unit, Service, and Install sections: what is the restart policy configured under 'Restart='?",0
+Extract the model architecture name from this detailed PyTorch model summary table showing 20 layers and parameter counts.,0
+From this lengthy Apache access log snippet with 15 requests: what is the user-agent string of the request from IP 10.0.0.9?,0
+In this detailed database schema dump containing 5 tables with foreign keys and check constraints: what table does the 'user_id' in table 'orders' reference?,0
+"Read this lengthy software release checklist with 20 items across QA, Security, Documentation, and Ops. Who is the assigned owner for the 'Update Swagger Docs' task?",0
+From this detailed AWS S3 bucket lifecycle configuration XML: after how many days are objects transitioned to Glacier?,0
+"In this verbose BGP routing table dump showing prefixes, next hops, AS paths, and local preference: what is the next hop IP for prefix 198.51.100.0/24?",0
+Extract the billing contact person's name from this detailed corporate vendor agreement preamble.,0
+"From this detailed container inspect JSON dump showing mounts, env vars, networks, and state: what is the container IP address on the bridge network?",0
+"In this verbose webpack bundle analysis output showing chunk names, sizes, and module dependencies: what is the size in kilobytes of the 'vendor.js' bundle?",0
+Read this lengthy 400-word job description for a Senior Backend Engineer. How many years of professional experience are required in the qualifications section?,0
+From this detailed Grafana dashboard JSON configuration containing 8 panels and query targets: what is the title of panel ID 4?,0
+"In this verbose network ping trace with 20 packets showing sequence numbers, TTLs, and round-trip times: what was the minimum round-trip time recorded?",0
+Redis vs Memcached for session storage and caching?,1
+"Should we shard our database by user_id or organization_id, and why?",1
+Monolith or microservices for our early-stage MVP?,1
+Why would a database connection pool deadlock under high concurrent traffic?,1
+How to prevent double-spending without distributed transactions in microservices?,1
+Kubernetes vs serverless containers for our asynchronous worker pipeline?,1
+How can an attacker exploit an unvalidated URL redirect in OAuth2?,1
+Why is our B-tree index being ignored in this range query?,1
+Should we adopt optimistic or pessimistic concurrency for inventory checkout?,1
+What causes silent WAL accumulation on PostgreSQL streaming replication secondaries?,1
+How to handle eventual consistency anomalies in a distributed shopping cart?,1
+Why did our deep learning model loss diverge right after learning rate warm-up?,1
+Can a JWT signature validation be bypassed if the algorithm is set to none?,1
+How do we survive a split-brain condition in a 3-node Raft cluster?,1
+Should we use gRPC or REST for high-throughput inter-service communication?,1
+How to safely roll back a database migration that dropped a column in production?,1
+Why is our Java garbage collection pause time exceeding 500ms under low CPU load?,1
+Single shared database vs database-per-service for an enterprise migration?,1
+How to model time-series metric rollups efficiently in Apache Cassandra?,1
+What are the security implications of running Docker containers as root?,1
+How to diagnose intermittent packet loss occurring strictly across cross-region VPC peerings?,1
+DynamoDB vs Aurora PostgreSQL for a multi-tenant SaaS ledger?,1
+Why would an asynchronous Celery task duplicate execution despite task acknowledgement?,1
+How to design an idempotent payment processing endpoint with Stripe webhooks?,1
+Should we use event sourcing with CQRS or traditional relational CRUD here?,1
+Why is our Kafka consumer group constantly rebalancing during peak ingestion?,1
+How to mitigate cold-start latency spikes in serverless machine learning APIs?,1
+Can an adversary poison training data through uncurated public user feedback?,1
+Should we store raw JSON documents in PostgreSQL JSONB or MongoDB?,1
+Why does our application suffer thread starvation when using synchronous file I/O inside async loops?,1
+How to architect zero-downtime blue/green deployments for stateful WebSocket services?,1
+What are the trade-offs of using eBPF over traditional Linux iptables for network policy?,1
+How to implement distributed tracing across heterogeneous gRPC and RabbitMQ services?,1
+Why would a query run 100x slower when executed inside a prepared statement in Postgres?,1
+Should we use Apache Flink or Kafka Streams for real-time fraud aggregation?,1
+How to prevent SSRF vulnerabilities when fetching user-supplied avatar URLs?,1
+Why is our GPU utilization at 25% while GPU memory is at 95% during inference?,1
+How to coordinate a multi-region database failover without data loss or split-brain?,1
+Should we use Snowflake or ClickHouse for customer-facing sub-second analytics?,1
+What causes TCP connection reset storms on an overloaded reverse proxy?,1
+How to structure access control: Role-Based (RBAC) or Attribute-Based (ABAC)?,1
+Why would an in-memory cache hit ratio decrease when cache size is doubled?,1
+How to achieve exactly-once message processing using RabbitMQ and PostgreSQL?,1
+Should we deploy a custom LoRA adapter or use prompt engineering for classification?,1
+Why did our Kubernetes HPA fail to scale workers when queue depth spiked tenfold?,1
+How to secure internal service-to-service communications without full Istio mesh overhead?,1
+Can floating-point non-determinism cause divergent consensus in distributed state machines?,1
+Why is our Elasticsearch cluster red after a single node reboot?,1
+How to architect an asynchronous retry queue with exponential backoff and jitter in AMQP?,1
+"Should we use WebSockets, Server-Sent Events, or long polling for live dashboard updates?",1
+Why would a Linux system kill worker processes without generating an OOM killer log?,1
+How to optimize memory bandwidth bottlenecks in large language model inference?,1
+What are the regulatory risks of storing EU customer PII in US-East S3 buckets?,1
+How to resolve schema evolution conflicts in Avro messages without breaking old consumers?,1
+Why did our Redis replica discard the replication stream and trigger a full sync?,1
+Should we use client-side or server-side load balancing for microservices gRPC traffic?,1
+How to design an unguessable yet compact referral code generator resilient to collision attacks?,1
+Why does database query latency increase linearly with table size despite an index on the WHERE clause?,1
+How to isolate noisy neighbors in a multi-tenant Kubernetes inference cluster?,1
+What causes distributed transaction rollbacks to cascade into system-wide deadlocks?,1
+Should we use continuous batching or static batching for our self-hosted LLM API?,1
+How to prevent race conditions during distributed coupon redemption during flash sales?,1
+Why is our TLS handshake failing for 0.1% of clients on AWS Application Load Balancer?,1
+How to design an audit logging system that prevents rogue administrators from tampering with records?,1
+Should we implement rate limiting at the API gateway or at the individual service level?,1
+"Analyze this multi-threaded deadlock trace between WorkerThread and CleanupTask, determine the lock acquisition cycle, and explain how to break the dependency safely.",1
+"Trace the execution flow of a request passing through ingress, envoy proxy, auth sidecar, and upstream backend; isolate which component introduced the 504 gateway timeout based on these timestamps.",1
+"Calculate the amortized cost per prediction over 3 years given hardware depreciation schedules, power usage effectiveness, inference latency distributions, and GPU utilization curves.",1
+"Given this SQL execution plan with nested loops and sequential table scans, identify the cardinality misestimations, explain the root cause in statistics, and formulate the compound index strategy.",1
+Evaluate the mathematical correctness of this custom gradient clipping algorithm under distributed data parallel synchronization and prove whether it preserves gradient direction.,1
+Derive the expected queue waiting time using an M/M/c queuing model when arrival rate increases by 40% and each worker has a deterministic service time variance.,1
+"Given conflicting requirements between low latency (P99 < 15ms) and consistency across three continents, analyze which distributed consensus protocol is viable and what failure modes remain.",1
+"Synthesize the trade-offs between speculative decoding, continuous batching, and tensor parallelism for an 8xH100 inference pod running a 70B parameter model.",1
+"Analyze why this distributed training job hangs during all-reduce communication at epoch 4, evaluating NCCL ring topology, InfiniBand NIC saturation, and memory fragmentation.",1
+Determine the optimal re-sharding strategy for a 50TB distributed key-value store with hot key skew without incurring more than 2% packet loss during migration.,1
+"Given these memory heap dump profiles showing retaining paths in native PyTorch tensors, diagnose the reference cycle preventing GC from collecting allocated CUDA pages.",1
+Formulate an optimization model to minimize egress bandwidth costs across multi-cloud regions while adhering to regional data residency laws and SLAs.,1
+Evaluate the stability of this numerical ODE solver for stiff differential equations and propose a step-size adaptation rule that guarantees convergence.,1
+Analyze the causal dependencies in this microservices call graph during a cascading failure cascade and identify the optimal circuit-breaker threshold values.,1
+"Given this distributed clock drift log across 12 nodes, determine whether a linearizable read could have returned stale data under the Raft consensus lease implementation.",1
+Investigate why an asynchronous message queue accumulated 2 million unprocessed messages over 4 hours while CPU and memory on worker pods remained below 20%.,1
+Conduct a comprehensive root-cause postmortem of an intermittent memory leak that crashes Kubernetes worker pods every 72 hours only during high network I/O periods.,1
+"Analyze this incident log where PostgreSQL database connections spiked to maximum pool capacity, transaction latency degraded tenfold, and read queries timed out.",1
+Diagnose why an EKS Horizontal Pod Autoscaler failed to scale out inference worker pods during a sudden 10x traffic spike despite high queue ready count.,1
+Investigate the root cause of subtle floating-point discrepancies observed between model outputs on NVIDIA A100 GPUs versus AMD MI300X accelerators during identical inference batches.,1
+Formulate hypotheses and investigative experiments to determine why a microservice response latency P99 degraded from 25ms to 850ms following an operating system kernel patch.,1
+Perform a postmortem investigation of a silent data corruption incident where customer billing records had rounded decimal values due to improper ORM type coercion.,1
+Diagnose an intermittent SSL handshake failure occurring exclusively on 0.05% of incoming mobile client connections routed through an AWS Application Load Balancer.,1
+Investigate why worker pods experienced unhandled SIGKILL exits without any Kubernetes OOMKilled events or system error logs in syslog.,1
+"Analyze a production incident where distributed cache invalidation messages arrived out of order, leading to persistent stale data served to 5% of web users.",1
+Conduct a root-cause investigation into why an automated database backup script failed silently for 3 weeks while reporting exit code 0 to monitoring cron jobs.,1
+Diagnose the cause of unexpected TCP reset packets (RST) terminating persistent WebSocket connections during peak ingress traffic on edge proxies.,1
+Investigate why disk I/O wait times spiked to 98% on primary database nodes after enabling logical replication for an analytical reporting replica.,1
+"Analyze why model inference latency exhibited extreme bimodal distribution with 95% of requests taking 15ms and 5% taking over 4,500ms under steady request rates.",1
+Conduct a post-incident review of how an improperly scoped IAM policy allowed an automated CI runner to delete production S3 buckets during an integration test run.,1
+"Perform a STRIDE threat modeling analysis for this public-facing LLM gateway architecture, identifying prompt injection, data exfiltration, and model evasion attack vectors.",1
+"Analyze the security threat landscape of an automated CI/CD pipeline using GitHub Actions self-hosted runners, detailing container escape and secret theft mitigations.",1
+Produce an end-to-end threat model for a Kubernetes multi-tenant cluster hosting untrusted customer code execution sandboxes using gVisor and eBPF monitoring.,1
+"Evaluate the attack surface of an OAuth2 and OpenID Connect implementation in a microservices ecosystem, focusing on token replay, CSRF, and authorization code interception.",1
+Construct an attack tree for an adversary attempting to poison training data in an automated continual-learning pipeline hosted on AWS S3.,1
+"Perform a comprehensive threat assessment of an IoT gateway receiving telemetry over MQTT, detailing man-in-the-middle, replay, and device spoofing risks.",1
+Analyze the vulnerability of a distributed Redis cache to cache poisoning attacks and design cryptographic validation controls for cached responses.,1
+Evaluate the threat model of a serverless microservices architecture utilizing AWS Lambda and API Gateway against denial-of-wallet and algorithmic complexity attacks.,1
+Produce a zero-trust threat evaluation for remote developer access to production Kubernetes bastion hosts using WireGuard and hardware FIDO2 keys.,1
+"Assess the risk of side-channel attacks (timing attacks, power analysis, cache leakage) against a cryptographic microservice performing RSA and ECDSA private key signing.",1
+"Perform a threat analysis on the model serialization pipeline (Pickle, PyTorch .pt, Safetensors), explaining arbitrary remote code execution risks and remediation.",1
+Model the threats associated with API key exposure in client-side mobile applications and design an ephemeral session token exchange architecture.,1
+Evaluate the security posture of an internal developer platform against malicious insider threats attempting unauthorized elevation of AWS IAM privileges.,1
+Analyze the attack surface of a gRPC microservices cluster communicating across private VPC peerings without mutual TLS (mTLS) enforcement.,1
+Construct a threat model for an automated LLM code-generation assistant integrating with internal Git repositories and executing unit tests in staging.,1
+Draft a compliance and risk assessment analyzing GDPR Article 17 (Right to be Forgotten) implications for an immutable distributed append-only ledger.,1
+"Evaluate the legal, regulatory, and operational risks of storing patient health data across multi-tenant AWS cloud regions under HIPAA and HITECH standards.",1
+"Produce an enterprise risk assessment for deploying autonomous LLM agents with database write privileges, detailing safety guardrails and auditability.",1
+"Analyze the SOC 2 Type II trust service criteria (Security, Availability, Confidentiality) gaps in an existing Kubernetes infrastructure utilizing shared worker nodes.",1
+"Evaluate the regulatory requirements under PCI-DSS v4.0 for tokenizing, transmitting, and storing credit card primary account numbers in a cloud-native checkout API.",1
+Assess the legal and intellectual property exposure of training proprietary enterprise LoRA models on customer-generated support transcripts without explicit opt-in.,1
+Conduct a compliance review of an organization's cross-border data transfer mechanisms following the EU-US Data Privacy Framework invalidation precedents.,1
+Formulate an audit methodology and compliance verification checklist for verifying ISO/IEC 27001 ISMS controls across automated Terraform deployments.,1
+Analyze the corporate compliance obligations and regulatory disclosure timelines for reporting critical cybersecurity incidents to the SEC under Form 8-K rules.,1
+Evaluate the privacy and ethical compliance risks of implementing biometric facial recognition access controls on corporate campus video surveillance feeds.,1
+Assess the risk of regulatory penalties under the European Union AI Act for deploying high-risk credit-scoring machine learning models in production.,1
+"Draft a vendor risk assessment evaluating third-party SaaS dependencies (Datadog, Auth0, Snowflake) regarding data ownership, uptime SLAs, and breach notifications.",1
+Produce a regulatory compliance roadmap for open banking APIs adhering to PSD2 Strong Customer Authentication (SCA) and RTS technical standards.,1
+Analyze the forensic audit trail requirements for financial trading algorithms under MiFID II RTS 25 clock synchronization and order event logging rules.,1
+Conduct a data sovereignty and compliance review for deploying cloud workloads in Germany under the BSI C5 (Cloud Computing Compliance Criteria Catalogue).,1
+Evaluate whether to build an internal feature store or purchase commercial Managed Feast for a 50-person data science organization.,1
+Compare using CockroachDB versus Spanner for an international retail chain requiring strict ACID guarantees across North America and Europe.,1
+Analyze how adopting WebAssembly on Envoy edge proxies impacts request latency and security sandboxing compared to Lua scripting.,1
+"Evaluate the operational and cost implications of switching from Datadog to an open-source Grafana Mimir, Loki, and Tempo observability stack.",1
+"Determine the optimal cache invalidation architecture for a global news website with 50,000 updates per minute and strict freshness requirements.",1
+"Design an end-to-end event-driven architecture for real-time fraud detection handling 100,000 events/second with sub-50ms P99 latency, stateful stream processing, and exactly-once semantics.",1
+"Propose an infrastructure architecture for deploying a multi-tenant LLM serving platform with strict tenant isolation, dynamic LoRA adapter loading, and zero GPU cold-start penalty.",1
+Architect a global active-active multi-region disaster recovery system for a financial ledger requiring zero data loss (RPO=0) and failover within 30 seconds (RTO<30s).,1
+"Design a scalable semantic caching tier for LLM inference queries that balances vector similarity search recall, cache invalidation accuracy, and memory overhead.",1
+"Develop a complete microservices architecture for an automated medical imaging triage system, detailing DICOM ingestion, GPU worker auto-scaling, and HIPAA audit trails.",1
+"Propose an enterprise data mesh architecture for a global bank, detailing data product ownership, federated governance, polyglot persistence, and schema evolution contracts.",1
+Design a distributed rate-limiting and quota management subsystem across 5 AWS regions capable of handling 500k RPS with eventual consistency and bounded local state drift.,1
+Architect a federated learning platform across 200 hospital edge clusters that aggregates model updates under differential privacy without leaking patient information.,1
+"Design a highly available telemetry pipeline collecting metrics, logs, and distributed traces from 10,000 Kubernetes pods, featuring adaptive sampling and cost-optimized tiering.",1
+Create a modular architecture for a real-time recommendation engine combining collaborative filtering with contextual bandits and online feature stores.,1
+Design a resilient webhook dispatch platform that guarantees at-least-once delivery to external consumer endpoints with exponential backoff and dead-lettering.,1
+"Architect an internal developer platform on top of EKS and Crossplane that enables self-service RDS, S3, and Kafka provisioning with policy enforcement via OPA Gatekeeper.",1
+"Propose a clean architecture and domain-driven design for an institutional equities trading platform, specifying aggregate roots, domain events, and bounded contexts.",1
+"Design an asynchronous batch inference pipeline processing 10 million audio files daily, addressing GPU scheduling, spot instance preemption, and progress checkpointing.",1
+Architect a zero-trust network infrastructure for microservices running across hybrid cloud on-premise OpenShift and AWS EKS clusters using SPIFFE/SPIRE and Cilium.,1
+"Provide a detailed trade-off analysis comparing ClickHouse, Apache Pinot, and Snowflake for real-time user-facing analytics on 10 billion events per day.",1
+"Compare the operational, financial, and latency trade-offs between fine-tuning a small open-source LLM vs prompt engineering with retrieval-augmented generation (RAG) on GPT-4o.",1
+Analyze the trade-offs between synchronous RPC (gRPC) versus asynchronous message queues (RabbitMQ/Kafka) for order fulfillment in an e-commerce microservices platform.,1
+"Compare monotonic sequential primary keys versus UUIDv7 and ULID for a high-write relational database, evaluating B-tree fragmentation, concurrency, and security.",1
+"Analyze the architectural trade-offs between database-level tenancy (separate DB per tenant) versus row-level multitenancy (shared DB with tenant_id) at 50,000 customers.",1
+"Evaluate the cost, complexity, and performance trade-offs of using eBPF-based service mesh (Cilium) versus sidecar proxy architecture (Istio/Envoy) in large Kubernetes clusters.",1
+"Compare GraphQL versus REST with JSON:API for a complex enterprise SaaS dashboard, analyzing caching difficulty, client flexibility, and over-fetching.",1
+Provide a rigorous trade-off comparison between optimistic locking and pessimistic locking under high contention write workloads in PostgreSQL.,1
+Analyze the trade-offs of implementing feature stores using Feast with Redis online storage versus building custom DynamoDB feature lookup caches.,1
+Compare using Kafka vs Apache Pulsar for a multi-tenant messaging backbone requiring tiered cold storage in S3 and geo-replication.,1
+Evaluate the trade-offs between client-side load balancing via gRPC name resolution versus server-side L7 load balancers (Envoy/ALB) under high connection churn.,1
+Compare Docker multi-stage container builds versus Nix-based deterministic container builds for reproducible production CI/CD pipelines.,1
+Analyze the security versus developer velocity trade-offs of enforcing ephemeral branch environments with complete database cloning on every pull request.,1
+Evaluate the trade-offs between Kubernetes HPA based on custom Prometheus queue depth metrics versus KEDA (Kubernetes Event-driven Autoscaling) operators.,1
+Compare serverless container execution (AWS Fargate) versus dedicated managed EC2 node groups for bursty asynchronous model inference workers.,1
+"Formulate a zero-downtime database migration plan to transition a 15TB PostgreSQL instance to AWS Aurora PostgreSQL across regions, including CDC and rollback criteria.",1
+"Develop a comprehensive disaster recovery plan for a multi-tier banking application, detailing DNS failover via Route 53, database split-brain prevention, and RTO/RPO validation.",1
+Plan the live migration of 500 stateful services from an on-premise VMware cluster to AWS EKS with Ceph CSI persistent storage replication and minimal cutover downtime.,1
+Design a rollback and contingency protocol for migrating from an in-house Redis cluster to AWS ElastiCache Serverless under active production read/write traffic.,1
+Create a phased multi-quarter migration roadmap to break a monolithic Rails application into microservices using the Strangler Fig pattern without freezing feature development.,1
+"Develop a disaster recovery drill simulation protocol for simulating complete loss of an AWS primary region (us-east-1), verifying IAM replication and cross-region KMS keys.",1
+Plan the schema migration of a live 500-million-row table to add a non-null column with foreign key constraints without taking exclusive table locks in PostgreSQL.,1
+Formulate a cloud migration strategy to relocate 2 petabytes of compliance video archives from Google Cloud Storage to AWS S3 Glacier Flexible Retrieval with checksum verification.,1
+Design a migration plan to upgrade a 50-node Kubernetes cluster across 3 minor versions (1.28 to 1.31) with zero interruption to active WebSocket connections.,1
+"Develop a failback procedure for reconnecting primary on-premise infrastructure after a 48-hour failover to cloud disaster recovery environments, ensuring bidirectional data sync.",1
+Create a step-by-step decommission plan for legacy Apache Cassandra clusters while transitioning analytical queries to ScyllaDB with dual-write validation.,1
+"Design a business continuity and disaster recovery plan for surviving ransomware attacks targeting cloud backup snapshots, including immutable air-gapped vaults.",1
+"Plan the migration of 100,000 active customer Stripe subscriptions to a custom internal billing engine, mitigating duplicate billing risks and failed webhooks.",1
+Formulate a cutover execution playbook for switching production DNS and SSL termination to Cloudflare with immediate rollback capabilities if origin errors spike.,1
+Develop a disaster recovery framework for an AI inference gateway when the primary cloud GPU provider suffers an extended regional capacity outage.,1
+"Build a detailed compute, storage, and networking capacity model for scaling an LLM inference fleet from 1,000 to 50,000 concurrent active users while maintaining P99 latency under 200ms.",1
+"Calculate the required IOPS, storage bandwidth, and memory sizing for a Cassandra cluster handling 500,000 writes/second with a 90-day TTL and 3x replication factor.",1
+Develop a sizing model for an Elasticsearch logging cluster ingesting 2 TB of compressed JSON logs per day with 30-day hot tier and 365-day cold S3 tier retention.,1
+"Formulate a GPU capacity forecast for an enterprise AI team over the next 18 months, accounting for model parameter growth, fine-tuning cadence, and batch inference needs.",1
+"Calculate the required network bandwidth, connection pooling, and ingress proxy capacity to sustain 10 million concurrent persistent WebSocket connections.",1
+"Model the disk space growth, WAL generation rate, and replica lag for a PostgreSQL database undergoing 15,000 financial transactions per second.",1
+Estimate the compute and memory footprints required to execute an hourly Apache Spark ETL pipeline processing 50 billion ad-impression events on AWS EMR.,1
+Construct a capacity model for an object storage cache caching the top 20% most accessed video assets in a content delivery network serving 50 Gbps peak egress.,1
+"Develop a capacity scaling plan for RabbitMQ message broker clusters under extreme seasonal Black Friday traffic spikes with 50,000 message/sec bursts.",1
+Calculate the memory requirements and CPU core sizing for an in-memory Redis cluster supporting 200 million user session objects with TTL expiration.,1
+Model the cold-start and provisioning latency impacts on AWS Lambda concurrency limits when scaling an image-processing service during flash sales.,1
+Estimate the network cross-region replication bandwidth and egress costs for synchronizing 100 TB of daily changed database blocks between us-east-1 and eu-west-1.,1
+"Build a sizing and autoscaling specification for a Kafka cluster handling 100,000 partitions with zero message drop under double-broker hardware failure.",1
+Determine the optimal instance type selection and node group sizing (m6i vs c6i vs r6i) for an asynchronous worker pool draining high-memory analytical workloads.,1
+"Calculate the database connection limit capacity and PgBouncer pool sizing required when migrating 300 monolithic PHP processes to 5,000 serverless functions.",1
+"Design an end-to-end data pipeline for continuous model retraining, including feature drift detection, shadow deployment, and automated canary evaluation.",1
+"Architect a multi-cloud disaster recovery topology that can automatically reroute 500,000 active WebSocket sessions between AWS and GCP without dropping state.",1
+Formulate a zero-downtime database cutover strategy for migrating a 50-terabyte MySQL database to Amazon Aurora PostgreSQL using AWS DMS and dual-writing.,1
+Develop a disaster recovery failover drill protocol for simulating a total network partition isolating an organization's primary data center from cloud services.,1
+"Build a comprehensive capacity model for an analytical database ingesting 50,000 events/second with columnar compression, calculating storage, IOPS, and memory requirements over 3 years.",1
+"Calculate the GPU memory requirements, compute throughput (TFLOPS), and network bandwidth necessary to serve a 70B parameter model with tensor parallelism across 4 GPUs.",1
+Perform a STRIDE threat model on a multi-tenant SaaS application that allows users to upload and execute untrusted WebAssembly (WASM) plugins in the browser and backend.,1
+Conduct a comprehensive architecture review of our hybrid-cloud network egress topology and design an automated traffic rerouting strategy for fiber cuts.,1
+Develop a multi-cluster Kubernetes federation architecture spanning AWS and Google Cloud that guarantees atomic workload scheduling and synchronized secrets.,1
+"Propose a distributed telemetry ingestion architecture that ingests 500,000 spans/sec with dynamic head-based and tail-based sampling to reduce storage costs by 75%.",1

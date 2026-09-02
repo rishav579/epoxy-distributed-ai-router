@@ -40,7 +40,7 @@ The gateway creates the task row before publishing. `POST /predict` returns `202
 only after the publish succeeds. `GET /status/{task_id}` reads PostgreSQL, keeping
 the queue private and making status queries independent of worker placement.
 
-## Consumer, inference, and failure handling
+## Consumer, routing, and execution boundary
 
 ```text
  RabbitMQ durable queue
@@ -48,29 +48,49 @@ the queue private and making status queries independent of worker placement.
           |
           | manual delivery (prefetch=1)
           v
- +-------------------+       +-------------------+
- | inference_worker  | ----> | PyTorch + PEFT    |
- | parse message     |       | LoRA adapter      |
- | mark processing   |       | predict(text)     |
- +---------+---------+       +---------+---------+
-           |                           |
-           | success                   | exception (DB, model, malformed msg)
-           v                           v
- +-------------------+       +-------------------+
- | PostgreSQL txn    |       | message.nack      |
- | result + completed|       | (requeue=False)   |
- +---------+---------+       +---------+---------+
-           |                           |
-           | commit, then ACK          v
+ +-------------------+       +--------------------+
+ | inference_worker  | ----> | PyTorch + PEFT     |
+ | parse message     |       | LoRA classifier    |
+ | mark processing   |       | predict(text)      |
+ +---------+---------+       +---------+----------+
+           |                           | (label, probs)
+           |                           v
+           |                 +--------------------+
+           |                 | RoutingPolicy      |
+           |                 | (confidence check) |
+           |                 +----+----------+----+
+           |                      |          |
+           |       route: local   |          | route: frontier
+           |                      v          v
+           |               +----------+  +-------------+
+           |               | Local    |  | Frontier    |
+           |               | Executor |  | Executor    |
+           |               +----+-----+  +-----+-------+
+           |                    |              |
+           |                    +-------+------+
+           |                            |
+           | success                    v (exec_result)
+           v                 +--------------------+
+ +-------------------+       | Exception          |
+ | PostgreSQL txn    |       | (model/exec/DB)    |
+ | result + completed|       +---------+----------+
+ +---------+---------+                 |
+           |                           v
+           | commit, then ACK      message.nack (requeue=False)
            +-------------------->  RabbitMQ DLX
                                   -> inference.requests.dlq
 ```
 
-The worker acknowledges only after the result insert and task transition to
-`completed` commit in one database transaction. Any exception is logged and
-negatively acknowledged to the queue's dead-letter exchange. A process loss before
-ACK leaves the delivery unacknowledged, so RabbitMQ can redeliver it; a deliberate
-`requeue=False` failure is retained in the DLQ for inspection/replay workflows.
+The worker separates complexity classification from response execution:
+1. **Classification:** Evaluates input text with DistilBERT LoRA to compute `[p_simple, p_complex]`.
+2. **Routing Decision:**
+   - If `confidence >= threshold` (default `0.75`) and `label == 0`, routes to `local` with reason `high_confidence_simple`.
+   - If `confidence >= threshold` and `label == 1`, routes to `frontier` with reason `high_confidence_complex`.
+   - If `confidence < threshold`, escalates to `frontier` with reason `ambiguous_confidence`.
+3. **Execution Boundary:**
+   - `LocalExecutor`: Simulates or dispatches to a local SLM response model.
+   - `FrontierExecutor`: Dispatches to `MockFrontierProvider` (for deterministic offline testing) or `HttpFrontierProvider` (for OpenAI-compatible endpoints with `FRONTIER_API_KEY`).
+4. **Failure & Durability:** The worker records all outputs (`route`, `confidence`, `probabilities`, `execution_result`, `status`) to PostgreSQL inside an atomic transaction. A message is positively acknowledged (`message.ack()`) ONLY after the database transaction commits. Any unhandled exception causes task failure recording and negative acknowledgment (`message.nack(requeue=False)`) to the dead-letter exchange.
 
 ## Kubernetes autoscaling loop
 

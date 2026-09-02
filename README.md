@@ -6,9 +6,13 @@ handles straightforward requests; only ambiguous or complex requests need to be
 forwarded to a frontier LLM. The result is a cost-aware routing boundary that can be
 measured, scaled, and operated like a production service.
 
-> **Current implementation:** the repository provides the local PyTorch/LoRA
-> classifier, durable inference pipeline, benchmark tooling, and deployment
-> foundations. Frontier-LLM forwarding is the next policy/integration layer.
+> **Current implementation:** Epoxy implements a two-tier inference routing architecture:
+> 1. **Complexity Classifier:** Fine-tuned DistilBERT LoRA sequence classifier categorizing requests into simple (0) vs complex (1).
+> 2. **Confidence & Ambiguity Routing Policy:** High-confidence simple requests route locally; high-confidence complex requests route to the frontier tier; ambiguous requests (confidence below configured threshold, default `0.75`) escalate to the frontier tier for safety.
+> 3. **Execution Boundaries:**
+>    - **Local path:** `LocalExecutor` abstraction providing structured responses for the local SLM tier.
+>    - **Frontier path:** `FrontierExecutor` supporting pluggable adapters (`MockFrontierProvider` for offline testing and deterministic CI, and `HttpFrontierProvider` for OpenAI/generic HTTP endpoints with `FRONTIER_API_KEY`).
+> 4. **Durable Persistence:** PostgreSQL records task status, classifier probabilities, routing decisions, confidence, and execution output before AMQP ACK.
 
 ## Why Epoxy?
 
@@ -16,11 +20,10 @@ Most production traffic is repetitive, bounded, and inexpensive to classify. Sen
 every request to a premium model creates unnecessary latency and token spend. Epoxy
 separates the routing decision from execution:
 
-- **Simple** requests can run on a local small language model (SLM).
-- **Complex** requests can be escalated to a frontier LLM when the policy requires
-  deeper reasoning or broader context.
-- Every request receives a durable task ID, observable status, and recoverable
-  failure path.
+- **Simple** requests run on a local small language model (SLM) path.
+- **Complex** requests escalate to a frontier LLM when deep reasoning or synthesis is needed.
+- **Ambiguous** requests escalate to the frontier LLM by policy to prevent degraded answers.
+- Every request receives a durable task ID, observable status, full probability distribution, and recoverable failure path.
 
 ## Architecture
 
@@ -28,14 +31,30 @@ separates the routing decision from execution:
 Client
   │ POST /predict
   ▼
-FastAPI Gateway ──► PostgreSQL (task state)
+FastAPI Gateway ──► PostgreSQL (task state: queued)
   │
-  └───────────────► RabbitMQ (durable work queue + DLQ)
+  └───────────────► RabbitMQ (durable queue + DLQ)
                            │
                            ▼
-                    PyTorch/LoRA Worker
+                    Inference Worker
                            │
-                           └──► PostgreSQL (result + status)
+                 [Complexity Classifier]
+                     (label, probs)
+                           │
+                 [Routing Policy Engine]
+              (threshold, confidence check)
+               ┌───────────┴───────────┐
+               ▼                       ▼
+          route: local            route: frontier
+         (LocalExecutor)      (FrontierExecutor)
+               │                       │
+               └───────────┬───────────┘
+                           ▼
+                 PostgreSQL Transaction
+             (results: route, confidence,
+              execution_result, status)
+                           │
+                  RabbitMQ Manual ACK
 ```
 
 The gateway acknowledges an HTTP request after task creation and durable queue
@@ -129,10 +148,12 @@ EKS, and an IRSA role scoped to the worker service account. Kubernetes manifests
 under `deploy/kubernetes`; the worker HPA scales on
 `rabbitmq_queue_messages_ready` rather than CPU alone.
 
-The GitHub Actions release workflow at
-`.github/workflows/production-deploy.yml` runs E2E tests, builds immutable gateway
-and worker images, pushes them to ECR, and deploys the manifests to EKS using GitHub
-OIDC—no long-lived AWS access keys.
+## Current architectural status and limitations
+
+- **Complexity Classifier vs. Generator:** The local DistilBERT LoRA model acts strictly as a sequence classification router (predicting whether a task is simple or complex). It is not a generative natural language answer model.
+- **Local Execution Boundary:** `LocalExecutor` serves as an adapter prototype for where a quantized local generative SLM (e.g. Gemma, Mistral, or Llama) connects in a subsequent phase.
+- **Frontier Provider Boundary:** `FrontierExecutor` supports pluggable adapters. Automated test suites and local E2E pipelines use `MockFrontierProvider` for deterministic offline verification without external secrets. The `HttpFrontierProvider` adapter exists for OpenAI-compatible endpoints, but live production API execution has not been live-tested with active credentials in this phase.
+- **Cloud Deployment Status:** Cloud infrastructure configurations (Terraform, EKS, RDS, IRSA, and GitHub Actions OIDC) exist as code but have not been live-deployed or verified against real AWS accounts in this phase.
 
 ## Repository guide
 

@@ -101,10 +101,16 @@ async def initialize_database(database: asyncpg.Pool) -> None:
         CREATE TABLE IF NOT EXISTS inference_results (
             task_id UUID PRIMARY KEY REFERENCES inference_tasks(task_id),
             label INTEGER NOT NULL,
+            route TEXT NOT NULL DEFAULT 'local',
+            confidence DOUBLE PRECISION NOT NULL DEFAULT 1.0,
             probabilities JSONB NOT NULL,
+            execution_result JSONB NOT NULL DEFAULT '{}'::jsonb,
             model_version TEXT NOT NULL,
             created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         );
+        ALTER TABLE inference_results ADD COLUMN IF NOT EXISTS route TEXT DEFAULT 'local';
+        ALTER TABLE inference_results ADD COLUMN IF NOT EXISTS confidence DOUBLE PRECISION DEFAULT 1.0;
+        ALTER TABLE inference_results ADD COLUMN IF NOT EXISTS execution_result JSONB DEFAULT '{}'::jsonb;
         """
     )
 
@@ -216,7 +222,10 @@ async def task_status(task_id: UUID, resources: ResourcesDependency) -> TaskStat
             t.updated_at,
             t.error,
             r.label,
+            r.route,
+            r.confidence,
             r.probabilities,
+            r.execution_result,
             r.model_version
         FROM inference_tasks t
         LEFT JOIN inference_results r ON t.task_id = r.task_id
@@ -232,9 +241,15 @@ async def task_status(task_id: UUID, resources: ResourcesDependency) -> TaskStat
         probabilities = record["probabilities"]
         if isinstance(probabilities, str):
             probabilities = json.loads(probabilities)
+        execution_result = record.get("execution_result")
+        if isinstance(execution_result, str):
+            execution_result = json.loads(execution_result)
         result = {
             "label": record["label"],
+            "route": record.get("route") or "local",
+            "confidence": float(record["confidence"]) if record.get("confidence") is not None else 1.0,
             "probabilities": probabilities,
+            "execution_result": execution_result or {},
             "model_version": record["model_version"],
         }
 

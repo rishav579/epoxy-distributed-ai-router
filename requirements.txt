@@ -7,3 +7,4 @@ transformers>=4.40,<6.0
 peft>=0.10,<1.0
 prometheus-client>=0.21,<1.0
 scikit-learn>=1.4,<2.0
+httpx>=0.27,<1.0

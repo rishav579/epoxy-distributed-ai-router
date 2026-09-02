@@ -1,3 +1,101 @@
-﻿text,label
-Amazing quality,1
-This was a waste of money,0
+text,label
+What is the default port number for SSH?,0
+What does API stand for in software engineering?,0
+What is the chemical formula for water?,0
+Who is the author of the Python programming language?,0
+What year was the Git version control system released?,0
+Convert this hex color to RGB: #00FF00.,0
+Convert 100 Celsius to Fahrenheit.,0
+Format this integer with comma separators: 5432100.,0
+Convert this snake_case name to PascalCase: invoice_line_item.,0
+"Translate to French: Good evening, welcome to our platform.",0
+Convert this sentence to lowercase: CRITICAL WARNING DETECTED.,0
+"Replace all commas with semicolons in: item1,item2,item3,item4.",0
+Correct the grammar in this sentence: The server have been running without error.,0
+Fix spelling and punctuation: the deployement was completed with no error's,0
+"Correct this phrase: Between you and I, the architecture needs refactoring.",0
+Fix subject-verb agreement: A collection of logs were analyzed yesterday.,0
+Summarize this short meeting note: Team agreed to migrate from npm to pnpm on Monday.,0
+Give a 1-sentence summary of this bug report: The checkout button remains disabled on Safari.,0
+Condense this policy sentence: Employees may work remotely up to two days per work week.,0
+Provide a 5-word headline for this system announcement: Planned server restart at midnight UTC.,0
+Extract the order ID and delivery status from: Order #99104 is currently out for delivery.,0
+Find all email addresses in this text: Send inquiries to info@example.com or support@help.io.,0
+Extract the port number from this connection string: postgres://user:pass@db.internal:5432/app.,0
+"List the three file formats mentioned: The system accepts PNG, JPEG, and WebP images.",0
+"Classify the sentiment of this feedback: The new dashboard is clean, fast, and easy to use.",0
+Is this log line an error or an info message: [INFO] Successfully established database pool.,0
+Categorize this expense: Lunch with clients at Downtown Bistro ($65.00).,0
+Classify this incoming ticket: I cannot reset my two-factor authentication device.,0
+Format this phone number as (XXX) XXX-XXXX: 8005550199.,0
+"Extract the zip code from this customer address string: 100 Main St, Austin, TX 78701.",0
+Convert this Unix epoch timestamp 1700000000 to a human readable UTC date string.,0
+"Reorder these four priority labels from highest to lowest: Low, High, Medium, Critical.",0
+What is the HTTP method used in this request line: PUT /api/v1/resource/12 HTTP/1.1?,0
+"From this detailed 10-line server error log containing thread dumps, memory statistics, and socket states: extract the IP address of the remote host that initiated the failed connection.",0
+"In this lengthy Kubernetes ConfigMap definition containing 20 environment variable keys, logging flags, and connection timeouts: what is the value set for 'LOG_LEVEL'?",0
+"Below is a long excerpt from an employee handbook detailing vacation accrual rates, sick leave policies, and holiday schedules. How many paid holidays are observed per calendar year?",0
+Here is a detailed AWS IAM policy document with 6 statements. What S3 bucket ARN is specified in the resource section of the second statement?,0
+"From this verbose 30-line JSON payload representing an automated CI build status with commit metadata, author details, and test metrics: what is the value of the 'build_number' field?",0
+"In this lengthy 3-paragraph software support ticket describing user interactions, screen resolution, operating system version, and repro steps: what browser is the user using?",0
+Read this detailed 20-line Apache virtual host configuration file. What is the document root directory path configured for port 80?,0
+"From this long CSV snippet listing 10 server hostnames, CPU models, RAM sizes, and disk capacities: what is the RAM size listed for host 'srv-db-02'?",0
+In this lengthy Prometheus configuration scrape_configs block listing 8 job names and target URLs: what is the job_name specified for port 9100?,0
+"Extract the primary domain name from this detailed SSL certificate inspection output listing issuer, validity periods, and subject alternative names.",0
+From this verbose 25-line SQL DDL schema defining the 'customer_transactions' table: what is the default value assigned to the 'created_at' column?,0
+"In this lengthy firewall packet log showing source IPs, destination IPs, ports, protocols, and flags: what protocol was used for packet ID #4091?",0
+Below is a detailed markdown release note for version 2.4.0 describing 15 bug fixes and 5 new features. What issue number is associated with the login page fix?,0
+"Here is a 300-word corporate travel expense policy outlining mileage rates, per diem limits, and hotel caps. What is the maximum allowable nightly hotel rate in Chicago?",0
+"From this detailed Dockerfile inspect output displaying 15 environment variables, exposed ports, and label metadata: what port is exposed by the container?",0
+"In this lengthy network traceroute output showing 12 hops, IP addresses, and latencies: what is the IP address of hop number 5?",0
+Read this detailed 4-paragraph software security advisory describing vulnerability impacts and temporary workarounds. What version contains the permanent security patch?,0
+RabbitMQ vs SQS for guaranteed message ordering under concurrency?,1
+Should we use UUIDv4 or auto-incrementing integers for high-write tables?,1
+Why would database read replicas lag behind primary during heavy write bursts?,1
+How to prevent race conditions in a distributed inventory reservation system?,1
+Aurora Serverless v2 vs provisioned RDS for predictable enterprise workloads?,1
+Can an adversary bypass MFA through session fixation in our auth flow?,1
+Why did our PyTorch DataLoader cause CPU bottleneck during multi-GPU training?,1
+How to ensure zero downtime when altering a table with 100M rows in Postgres?,1
+Should we use a service mesh or direct gRPC for inter-pod mTLS?,1
+How to diagnose intermittent 502 Bad Gateway errors under 10k RPS?,1
+Why is our Redis cluster evicting keys when maxmemory-policy is volatile-lru?,1
+How to design a multi-region active-active disaster recovery for user profiles?,1
+Should we use Kafka or RabbitMQ for priority queueing with dead-lettering?,1
+How to architect distributed tracing through asynchronous message workers?,1
+Why would a Linux system drop packets when socket receive buffers are full?,1
+How to model multi-tenant data isolation in Elasticsearch without index explosion?,1
+Can SQL injection occur when using parameterized queries with dynamic table names?,1
+Analyze this distributed tracing waterfall where a 12-hop RPC chain experiences tail latency amplification; trace which downstream bottleneck causes the cascading timeout.,1
+"Given this high-load garbage collection pause profile, calculate how generational GC tenuring threshold adjustments impact P99 latency and total application throughput.",1
+Evaluate the mathematical validity of using a Bloom filter with a 1% false positive probability in front of a distributed database receiving 100M queries per day.,1
+Trace the consistency anomalies that can occur under Read Committed isolation level during concurrent financial transfer transactions and formulate serializable solutions.,1
+Formulate a distributed tracing correlation model to isolate memory leaks occurring across 5 asynchronous microservices communicating over gRPC streams.,1
+How to manage schema migrations across 100 isolated SQLite databases embedded on edge kiosks?,1
+Design a high-throughput priority queue system in Redis that avoids priority inversion.,1
+"Evaluate the trade-offs between Paxos, Raft, and Zab for distributed metadata storage.",1
+Why is our multi-AZ PostgreSQL replica experiencing deadlocks during logical decoding?,1
+How to structure an audit log for an AI system to comply with EU AI Act Article 12?,1
+"Design a real-time collaborative document editing architecture supporting 1,000 concurrent typists on a single document using Conflict-free Replicated Data Types (CRDTs).",1
+Provide a detailed trade-off analysis between single-writer multi-reader databases versus multi-master distributed relational databases for global inventory management.,1
+Evaluate the trade-offs between utilizing RocksDB as an embedded key-value store versus using external Redis clusters for stateful streaming microservices.,1
+"Compare the latency, network overhead, and security trade-offs of deploying mutual TLS (mTLS) with Envoy sidecars versus node-level IPsec in high-throughput clusters.",1
+"Analyze the trade-offs between coarse-grained microservices versus fine-grained nanoserices in terms of distributed tracing, debugging complexity, and deployment overhead.",1
+"Investigate a production incident where memory usage continuously escalated on worker nodes until kernel OOM killer terminated processes, but Python memory profilers showed constant heap.",1
+Diagnose why an asynchronous worker pool draining an SQS queue experienced severe message processing starvation despite average queue latency staying under 5 seconds.,1
+Design a continuous verification framework for synthetic transaction generation in financial staging environments.,1
+Formulate an active-passive multi-cloud failover strategy between Azure and AWS for an automated clearing house.,1
+Develop a CDC synchronization pipeline to mirror 100 million DynamoDB records into BigQuery without read capacity exhaustion.,1
+Create an automated game day simulation protocol to test regional DNS evacuation under catastrophic transit loss.,1
+"Design a rollback strategy for a major microservices API versioning migration affecting 20,000 third-party integrations with breaking contract changes.",1
+Create a step-by-step business continuity playbook for rebuilding all core infrastructure from scratch using GitOps and Terraform after a catastrophic cloud account compromise.,1
+Analyze the root cause of an unexpected cascade of HTTP 502 Bad Gateway responses when an upstream microservice deployed an updated gRPC health check.,1
+Conduct a root cause postmortem into how an unindexed query on an auxiliary audit table brought down the primary transactional database during peak business hours.,1
+Analyze the attack vectors and defensive mitigations for a server-side request forgery (SSRF) vulnerability inside a cloud microservice accessing AWS EC2 metadata (IMDSv2).,1
+Produce a threat model and defensive architecture for mitigating prompt injection and indirect prompt injection attacks in enterprise customer service LLM agents.,1
+"Model the scaling dynamics and connection saturation points of an internal LDAP authentication cluster when 20,000 microservice pods restart simultaneously.",1
+"Assess the legal, architectural, and security compliance risks of retaining encrypted customer transaction records in an append-only cloud storage bucket under HIPAA and PCI-DSS.",1
+Evaluate the organizational and technical risks of integrating third-party closed-source frontier LLM APIs into confidential intellectual property patent drafting workflows.,1
+"Draft a compliance framework for ensuring automated algorithmic decision systems comply with European Union AI Act transparency, logging, and human oversight rules.",1
+Propose a hierarchical token-bucket rate limiter for multi-region APIs using local synchronization over gossip.,1
+Model memory fragmentation curves in high-concurrency Node.js microservices processing large binary streams.,1

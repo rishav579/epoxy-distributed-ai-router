@@ -33,6 +33,7 @@ wandb/
 # Local E2E logs and generated benchmark data
 .local-e2e-logs/
 benchmark_dataset.csv
+benchmark_report.md
 *.log
 
 # Environment files and credentials

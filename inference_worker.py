@@ -30,6 +30,30 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer, PreT
 LOGGER = logging.getLogger("inference_worker")
 COMPLETED_MESSAGES = Counter("inference_worker_completed_messages_total", "Successfully acknowledged messages")
 FAILED_MESSAGES = Counter("inference_worker_failed_messages_total", "Messages rejected to the dead letter queue")
+ROUTER_CLASSIFICATIONS = Counter(
+    "inference_router_classifications_total",
+    "Total requests classified by complexity label",
+    ["classification"],
+)
+ROUTER_DECISIONS = Counter(
+    "inference_router_decisions_total",
+    "Total requests routed by destination and reason",
+    ["route", "reason"],
+)
+ROUTER_EXECUTIONS = Counter(
+    "inference_router_executions_total",
+    "Total requests executed by provider and status",
+    ["provider", "status"],
+)
+
+from router_engine import (
+    ExecutionResult,
+    FrontierExecutor,
+    LocalExecutor,
+    RoutingDecision,
+    RoutingPolicy,
+    create_frontier_provider,
+)
 
 
 @dataclass(frozen=True)
@@ -42,6 +66,12 @@ class Settings:
     registry_path: Path
     max_length: int
     num_labels: int
+    router_confidence_threshold: float
+    frontier_provider: str
+    frontier_api_key: str | None
+    frontier_api_base: str
+    frontier_model: str
+    local_model_name: str
 
     @classmethod
     def from_environment(cls) -> Settings:
@@ -58,6 +88,12 @@ class Settings:
             registry_path=Path(os.environ.get("LOCAL_MODEL_REGISTRY_DIR", "outputs/adapter")),
             max_length=int(os.environ.get("MAX_LENGTH", "256")),
             num_labels=int(os.environ.get("NUM_LABELS", "2")),
+            router_confidence_threshold=float(os.environ.get("ROUTER_CONFIDENCE_THRESHOLD", "0.75")),
+            frontier_provider=os.environ.get("FRONTIER_PROVIDER", "mock"),
+            frontier_api_key=os.environ.get("FRONTIER_API_KEY"),
+            frontier_api_base=os.environ.get("FRONTIER_API_BASE", "https://api.openai.com/v1"),
+            frontier_model=os.environ.get("FRONTIER_MODEL", "gpt-4o-mini"),
+            local_model_name=os.environ.get("LOCAL_MODEL_NAME", "local-slm-prototype"),
         )
 
 
@@ -169,10 +205,16 @@ async def initialize_database(database: asyncpg.Pool) -> None:
         CREATE TABLE IF NOT EXISTS inference_results (
             task_id UUID PRIMARY KEY REFERENCES inference_tasks(task_id),
             label INTEGER NOT NULL,
+            route TEXT NOT NULL DEFAULT 'local',
+            confidence DOUBLE PRECISION NOT NULL DEFAULT 1.0,
             probabilities JSONB NOT NULL,
+            execution_result JSONB NOT NULL DEFAULT '{}'::jsonb,
             model_version TEXT NOT NULL,
             created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-        )
+        );
+        ALTER TABLE inference_results ADD COLUMN IF NOT EXISTS route TEXT DEFAULT 'local';
+        ALTER TABLE inference_results ADD COLUMN IF NOT EXISTS confidence DOUBLE PRECISION DEFAULT 1.0;
+        ALTER TABLE inference_results ADD COLUMN IF NOT EXISTS execution_result JSONB DEFAULT '{}'::jsonb;
         """
     )
 
@@ -207,22 +249,36 @@ async def mark_processing(database: asyncpg.Pool, task_id: UUID) -> None:
         raise ValueError(f"Unknown task_id: {task_id}")
 
 
-async def save_result(database: asyncpg.Pool, task_id: UUID, result: InferenceResult) -> None:
+async def save_result(
+    database: asyncpg.Pool,
+    task_id: UUID,
+    clf_result: InferenceResult,
+    decision: RoutingDecision,
+    exec_result: ExecutionResult,
+) -> None:
     async with database.acquire() as connection, connection.transaction():
         await connection.execute(
             """
-            INSERT INTO inference_results (task_id, label, probabilities, model_version)
-            VALUES ($1, $2, $3::jsonb, $4)
+            INSERT INTO inference_results (
+                task_id, label, route, confidence, probabilities, execution_result, model_version
+            )
+            VALUES ($1, $2, $3, $4, $5::jsonb, $6::jsonb, $7)
             ON CONFLICT (task_id) DO UPDATE SET
                 label = EXCLUDED.label,
+                route = EXCLUDED.route,
+                confidence = EXCLUDED.confidence,
                 probabilities = EXCLUDED.probabilities,
+                execution_result = EXCLUDED.execution_result,
                 model_version = EXCLUDED.model_version,
                 created_at = NOW()
             """,
             task_id,
-            result.label,
-            json.dumps(result.probabilities),
-            result.model_version,
+            clf_result.label,
+            decision.route,
+            decision.confidence,
+            json.dumps(decision.probabilities),
+            exec_result.model_dump_json(),
+            clf_result.model_version,
         )
         updated = await connection.execute(
             """
@@ -233,6 +289,17 @@ async def save_result(database: asyncpg.Pool, task_id: UUID, result: InferenceRe
         )
         if updated != "UPDATE 1":
             raise ValueError(f"Unknown task_id: {task_id}")
+
+
+async def mark_failed(database: asyncpg.Pool, task_id: UUID, error: str) -> None:
+    await database.execute(
+        """
+        UPDATE inference_tasks SET status = 'failed', error = $2, updated_at = NOW()
+        WHERE task_id = $1
+        """,
+        task_id,
+        error[:1000],
+    )
 
 
 def release_oom_memory(device: torch.device) -> None:
@@ -247,21 +314,62 @@ async def process_message(
     message: AbstractIncomingMessage,
     database: asyncpg.Pool,
     loaded_model: LoadedModel,
+    routing_policy: RoutingPolicy,
+    local_executor: LocalExecutor,
+    frontier_executor: FrontierExecutor,
 ) -> None:
+    request: InferenceRequest | None = None
     try:
         request = InferenceRequest.from_message(message.body)
         await mark_processing(database, request.task_id)
-        result = loaded_model.predict(request.text)
-        await save_result(database, request.task_id, result)
-    except Exception:
-        LOGGER.exception("Inference failed; sending delivery tag=%s to DLQ", message.delivery_tag)
+
+        # Step 1: Run local complexity classifier
+        clf_result = loaded_model.predict(request.text)
+        ROUTER_CLASSIFICATIONS.labels(
+            classification="simple" if clf_result.label == 0 else "complex"
+        ).inc()
+
+        # Step 2: Make confidence-aware routing decision
+        decision = routing_policy.decide(clf_result.probabilities)
+        ROUTER_DECISIONS.labels(route=decision.route, reason=decision.reason).inc()
+
+        # Step 3: Dispatch to selected execution boundary
+        if decision.route == "local":
+            exec_result = await local_executor.execute(request.text)
+        else:
+            exec_result = await frontier_executor.execute(request.text)
+
+        ROUTER_EXECUTIONS.labels(
+            provider=exec_result.provider, status=exec_result.status
+        ).inc()
+
+        if exec_result.status == "failed":
+            raise RuntimeError(f"Execution failed: {exec_result.error or exec_result.output}")
+
+        # Step 4: Persist result atomically before message ACK
+        await save_result(database, request.task_id, clf_result, decision, exec_result)
+    except Exception as error:
+        LOGGER.exception("Processing failed; sending delivery tag=%s to DLQ", message.delivery_tag)
+        if request is not None:
+            try:
+                await mark_failed(database, request.task_id, str(error))
+            except Exception:
+                LOGGER.exception("Failed to mark task_id=%s as failed in database", request.task_id)
         release_oom_memory(loaded_model.device)
         await message.nack(requeue=False)
         FAILED_MESSAGES.inc()
         return
+
     await message.ack()
     COMPLETED_MESSAGES.inc()
-    LOGGER.info("Completed task_id=%s label=%s", request.task_id, result.label)
+    LOGGER.info(
+        "Completed task_id=%s label=%s route=%s reason=%s provider=%s",
+        request.task_id,
+        clf_result.label,
+        decision.route,
+        decision.reason,
+        exec_result.provider,
+    )
 
 
 def install_shutdown_handlers(stop_event: asyncio.Event) -> None:
@@ -285,6 +393,16 @@ async def run_worker() -> None:
     )
     settings = Settings.from_environment()
     loaded_model = load_model(settings)
+    routing_policy = RoutingPolicy(threshold=settings.router_confidence_threshold)
+    local_executor = LocalExecutor(model_name=settings.local_model_name)
+    frontier_provider = create_frontier_provider(
+        provider_type=settings.frontier_provider,
+        api_key=settings.frontier_api_key,
+        api_base=settings.frontier_api_base,
+        model=settings.frontier_model,
+    )
+    frontier_executor = FrontierExecutor(provider=frontier_provider)
+
     database = await asyncpg.create_pool(settings.database_url, min_size=1, max_size=5)
     connection = await aio_pika.connect_robust(settings.amqp_url)
     stop_event = asyncio.Event()
@@ -293,14 +411,26 @@ async def run_worker() -> None:
         await initialize_database(database)
         queue = await initialize_queue(connection, settings)
         start_http_server(8001)
-        LOGGER.info("Worker consuming queue=%s", settings.queue_name)
+        LOGGER.info(
+            "Worker consuming queue=%s router_threshold=%.2f frontier_provider=%s",
+            settings.queue_name,
+            settings.router_confidence_threshold,
+            settings.frontier_provider,
+        )
         while not stop_event.is_set():
             try:
                 message = await queue.get(no_ack=False, fail=False, timeout=1.0)
             except TimeoutError:
                 continue
             if message is not None:
-                await process_message(message, database, loaded_model)
+                await process_message(
+                    message,
+                    database,
+                    loaded_model,
+                    routing_policy,
+                    local_executor,
+                    frontier_executor,
+                )
     finally:
         await connection.close()
         await database.close()

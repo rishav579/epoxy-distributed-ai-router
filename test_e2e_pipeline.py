@@ -99,6 +99,18 @@ async def wait_for_terminal_statuses(
             payload = object_json(response)
             task_status = payload.get("status")
             if task_status in TERMINAL_STATUSES:
+                if task_status == "completed":
+                    result = payload.get("result")
+                    if not isinstance(result, dict):
+                        raise AssertionError(f"Task {task_id} completed but missing result: {payload}")
+                    if result.get("route") not in ("local", "frontier"):
+                        raise AssertionError(f"Task {task_id} invalid route: {result}")
+                    if not isinstance(result.get("confidence"), (int, float)):
+                        raise AssertionError(f"Task {task_id} invalid confidence: {result}")
+                    if not isinstance(result.get("execution_result"), dict):
+                        raise AssertionError(f"Task {task_id} invalid execution_result: {result}")
+                    if not isinstance(result.get("probabilities"), dict):
+                        raise AssertionError(f"Task {task_id} invalid probabilities: {result}")
                 results[task_id] = cast(str, task_status)
         unresolved.difference_update(results)
         if unresolved:
