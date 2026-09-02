@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: epoxy-routing-demo
+    env: python
+    region: ohio
+    plan: free
+    buildCommand: "pip install -r requirements-demo.txt"
+    startCommand: "uvicorn demo_app:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
