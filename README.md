@@ -146,7 +146,7 @@ Terraform modules are under `deploy/terraform` and define the AWS infrastructure
 - **Multi-AZ VPC:** Public and private subnets across 3 AZs with dedicated NAT gateways.
 - **Private Data Plane:** RDS PostgreSQL 16 Multi-AZ instance on private subnets, accessible only by EKS worker nodes.
 - **Private S3 Model Store:** Encrypted bucket (AES256, HTTPS enforced, public access blocked) for model weights and LoRA adapters.
-- **EKS Cluster:** Kubernetes 1.31 with managed node groups in private subnets, IRSA enabled, and **both public and private endpoint access** enabled so external GitHub-hosted runners can reach the control plane while compute nodes stay on private subnets.
+- **EKS Cluster:** Kubernetes 1.31 cluster with worker nodes in private subnets, IRSA enabled, and both private and public API endpoint access enabled (`cluster_endpoint_private_access = true`, `cluster_endpoint_public_access = true`). Public endpoint access is required for external GitHub-hosted Actions runners to authenticate and deploy manifests to the control plane, while compute nodes remain isolated on private subnets.
 - **GitHub Actions OIDC:** OpenID Connect provider and IAM role with trust policy strictly scoped to `repo:rishav579/epoxy-distributed-ai-router` (targeting `refs/heads/main` and `environment:production`), eliminating static AWS keys.
 
 ### Kubernetes deployment dependencies
@@ -155,6 +155,13 @@ The Kubernetes manifests under `deploy/kubernetes` decouple the stateless worklo
 - **`inference-secrets` (Secret):** Must be provisioned in the cluster namespace to supply `database-url` (RDS connection string) and `amqp-url` (RabbitMQ broker connection string).
 - **`inference-model-registry` (PersistentVolumeClaim):** Mounted at `/models` by worker pods to access model weights synchronized from S3 or shared storage.
 - **Prometheus Adapter / KEDA:** Required by `deploy/kubernetes/worker-hpa.yaml` to feed the `rabbitmq_queue_messages_ready` external metric into the Kubernetes Custom Metrics API for queue-depth autoscaling.
+
+### Kubernetes security controls
+
+Rather than claiming general "CIS-compliant" status, the manifests implement specific, concrete Kubernetes security controls:
+- **Pod security context:** Workloads run as non-root (`runAsNonRoot: true`, `runAsUser: 10001`), prohibit privilege escalation (`allowPrivilegeEscalation: false`), enforce a read-only root filesystem (`readOnlyRootFilesystem: true`), and drop all Linux capabilities (`capabilities: drop: ["ALL"]`).
+- **Kernel sandboxing:** Workloads enforce the `RuntimeDefault` seccomp profile (`seccompProfile: type: RuntimeDefault`).
+- **Credential & token hygiene:** API token automounting is disabled (`automountServiceAccountToken: false`), and sensitive credentials (PostgreSQL and RabbitMQ connection strings) are injected exclusively via Kubernetes Secrets (`inference-secrets`). Model weights are mounted read-only (`readOnly: true`).
 
 ## Current architectural status and limitations
 

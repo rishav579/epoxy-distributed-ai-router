@@ -196,16 +196,13 @@ according to their incident policy.
 
 ## Operational and security posture
 
-- PostgreSQL and RabbitMQ have container health checks locally. Kubernetes uses TCP
-  readiness/liveness probes and a 90-second worker termination grace period.
-- Gateway and worker expose Prometheus metrics. Worker counters include completed
-  and DLQ-failed messages; queue depth is the autoscaling metric.
-- Secrets are injected through Kubernetes `Secret` references, not image layers.
-  Worker model files are mounted read-only and containers run non-root with dropped
-  capabilities and read-only root filesystems.
-- The current worker uses one message at a time intentionally. Increase concurrency
-  only after measuring model memory, database pool capacity, and GPU contention;
-  otherwise queue-based autoscaling loses its predictable work-per-pod behavior.
+Rather than relying on generic "CIS-compliant" labels, the platform documents and implements specific, auditable Kubernetes security controls:
+- **Workload security contexts:** Container workloads run as non-root (`runAsNonRoot: true`, `runAsUser: 10001`), prohibit privilege escalation (`allowPrivilegeEscalation: false`), enforce a read-only root filesystem (`readOnlyRootFilesystem: true`), drop all Linux capabilities (`capabilities: drop: ["ALL"]`), and enforce the `RuntimeDefault` seccomp profile.
+- **Credential & token isolation:** API credential automounting is disabled (`automountServiceAccountToken: false`), and application secrets are injected via Kubernetes `Secret` resources (`inference-secrets`). Worker model weights are mounted read-only (`readOnly: true`).
+- **Cluster network architecture:** EKS worker nodes are placed in private subnets with `cluster_endpoint_private_access = true`. Public endpoint access (`cluster_endpoint_public_access = true`) is enabled because external GitHub-hosted Actions runners require API access to deploy manifests to the control plane, while worker compute nodes remain non-routable from the public internet.
+- **Probes and lifecycle:** PostgreSQL and RabbitMQ have container health checks locally. Kubernetes uses TCP readiness/liveness/startup probes and a 90-second worker termination grace period.
+- **Observability:** Gateway and worker expose Prometheus metrics. Worker counters include completed and DLQ-failed messages; queue depth is the autoscaling metric.
+- **Concurrency discipline:** The current worker uses one message at a time intentionally (`prefetch_count=1`). Increase concurrency only after measuring model memory, database pool capacity, and GPU contention; otherwise queue-based autoscaling loses its predictable work-per-pod behavior.
 
 ## Trade-offs and limits
 
