@@ -114,7 +114,6 @@ class TestExecutorsAndProviders(unittest.IsolatedAsyncioTestCase):
         self.assertIn("Local SLM processed query", result.output)
         self.assertGreaterEqual(result.latency_ms, 0.0)
 
-
 class TestResultPersistenceAndContract(unittest.TestCase):
     def test_8_task_result_persistence_structure(self) -> None:
         """Scenario 8: Result persistence payload includes all schema fields."""

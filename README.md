@@ -142,18 +142,26 @@ log metrics to Weights & Biases.
 
 ## Cloud deployment
 
-Terraform modules are under `deploy/terraform` and define a private-by-default AWS
-foundation: multi-AZ VPC, private RDS, private S3 model artifacts, private-endpoint
-EKS, and an IRSA role scoped to the worker service account. Kubernetes manifests are
-under `deploy/kubernetes`; the worker HPA scales on
-`rabbitmq_queue_messages_ready` rather than CPU alone.
+Terraform modules are under `deploy/terraform` and define the AWS infrastructure foundation:
+- **Multi-AZ VPC:** Public and private subnets across 3 AZs with dedicated NAT gateways.
+- **Private Data Plane:** RDS PostgreSQL 16 Multi-AZ instance on private subnets, accessible only by EKS worker nodes.
+- **Private S3 Model Store:** Encrypted bucket (AES256, HTTPS enforced, public access blocked) for model weights and LoRA adapters.
+- **EKS Cluster:** Kubernetes 1.31 with managed node groups in private subnets, IRSA enabled, and **both public and private endpoint access** enabled so external GitHub-hosted runners can reach the control plane while compute nodes stay on private subnets.
+- **GitHub Actions OIDC:** OpenID Connect provider and IAM role with trust policy strictly scoped to `repo:rishav579/epoxy-distributed-ai-router` (targeting `refs/heads/main` and `environment:production`), eliminating static AWS keys.
+
+### Kubernetes deployment dependencies
+
+The Kubernetes manifests under `deploy/kubernetes` decouple the stateless workload from environment-specific backing infrastructure via standard Kubernetes abstractions:
+- **`inference-secrets` (Secret):** Must be provisioned in the cluster namespace to supply `database-url` (RDS connection string) and `amqp-url` (RabbitMQ broker connection string).
+- **`inference-model-registry` (PersistentVolumeClaim):** Mounted at `/models` by worker pods to access model weights synchronized from S3 or shared storage.
+- **Prometheus Adapter / KEDA:** Required by `deploy/kubernetes/worker-hpa.yaml` to feed the `rabbitmq_queue_messages_ready` external metric into the Kubernetes Custom Metrics API for queue-depth autoscaling.
 
 ## Current architectural status and limitations
 
 - **Complexity Classifier vs. Generator:** The local DistilBERT LoRA model acts strictly as a sequence classification router (predicting whether a task is simple or complex). It is not a generative natural language answer model.
 - **Local Execution Boundary:** `LocalExecutor` serves as an adapter prototype for where a quantized local generative SLM (e.g. Gemma, Mistral, or Llama) connects in a subsequent phase.
 - **Frontier Provider Boundary:** `FrontierExecutor` supports pluggable adapters. Automated test suites and local E2E pipelines use `MockFrontierProvider` for deterministic offline verification without external secrets. The `HttpFrontierProvider` adapter exists for OpenAI-compatible endpoints, but live production API execution has not been live-tested with active credentials in this phase.
-- **Cloud Deployment Status:** Cloud infrastructure configurations (Terraform, EKS, RDS, IRSA, and GitHub Actions OIDC) exist as code but have not been live-deployed or verified against real AWS accounts in this phase.
+- **Cloud Deployment Status:** Cloud infrastructure configurations (Terraform, EKS, RDS, IRSA, and GitHub Actions OIDC) exist as code and validate cleanly, but live cloud provisioning is blocked because the target AWS account is currently on the Free Plan with S3 unactivated (`NotSignedUp`). No paid resources or fabricated deployments have been created.
 
 ## Repository guide
 

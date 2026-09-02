@@ -133,9 +133,12 @@ data "aws_iam_policy_document" "github_actions_assume_role" {
       values   = ["sts.amazonaws.com"]
     }
     condition {
-      test     = "StringLike"
+      test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:${var.github_actions_repo}:*"]
+      values = [
+        "repo:${var.github_actions_repo}:ref:refs/heads/main",
+        "repo:${var.github_actions_repo}:environment:production",
+      ]
     }
   }
 }
