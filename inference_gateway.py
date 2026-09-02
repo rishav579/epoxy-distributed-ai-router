@@ -6,6 +6,7 @@ Required environment: DATABASE_URL and AMQP_URL.
 
 from __future__ import annotations
 
+import json
 import os
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
@@ -80,6 +81,7 @@ class TaskStatusResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
     error: str | None
+    result: dict | None = None
 
 
 async def open_rabbit_connection(settings: Settings) -> AbstractRobustConnection:
@@ -95,7 +97,14 @@ async def initialize_database(database: asyncpg.Pool) -> None:
             created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             error TEXT
-        )
+        );
+        CREATE TABLE IF NOT EXISTS inference_results (
+            task_id UUID PRIMARY KEY REFERENCES inference_tasks(task_id),
+            label INTEGER NOT NULL,
+            probabilities JSONB NOT NULL,
+            model_version TEXT NOT NULL,
+            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        );
         """
     )
 
@@ -200,17 +209,40 @@ async def predict(payload: PredictRequest, resources: ResourcesDependency) -> Pr
 async def task_status(task_id: UUID, resources: ResourcesDependency) -> TaskStatusResponse:
     record = await resources.database.fetchrow(
         """
-        SELECT task_id, status, created_at, updated_at, error
-        FROM inference_tasks WHERE task_id = $1
+        SELECT
+            t.task_id,
+            t.status,
+            t.created_at,
+            t.updated_at,
+            t.error,
+            r.label,
+            r.probabilities,
+            r.model_version
+        FROM inference_tasks t
+        LEFT JOIN inference_results r ON t.task_id = r.task_id
+        WHERE t.task_id = $1
         """,
         task_id,
     )
     if record is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task not found")
+
+    result: dict | None = None
+    if record["label"] is not None:
+        probabilities = record["probabilities"]
+        if isinstance(probabilities, str):
+            probabilities = json.loads(probabilities)
+        result = {
+            "label": record["label"],
+            "probabilities": probabilities,
+            "model_version": record["model_version"],
+        }
+
     return TaskStatusResponse(
         task_id=cast(UUID, record["task_id"]),
         status=cast(TaskStatus, record["status"]),
         created_at=cast(datetime, record["created_at"]),
         updated_at=cast(datetime, record["updated_at"]),
         error=cast(str | None, record["error"]),
+        result=result,
     )

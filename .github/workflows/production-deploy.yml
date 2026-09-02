@@ -50,6 +50,22 @@ jobs:
             requirements-test.txt
       - name: Install test dependencies
         run: python -m pip install --upgrade pip && python -m pip install -r requirements.txt -r requirements-worker.txt -r requirements-test.txt
+      - name: Train mock LoRA adapter
+        env:
+          WANDB_MODE: offline
+        run: |
+          python train_lora_classifier.py \
+            --train-csv train.csv \
+            --val-csv val.csv \
+            --output-dir outputs \
+            --model-name hf-internal-testing/tiny-random-distilbert \
+            --num-labels 2 \
+            --epochs 1 \
+            --batch-size 2 \
+            --max-length 64 \
+            --patience 1 \
+            --wandb-project ci-mock \
+            --wandb-run-name mock-adapter
       - name: Start gateway and worker, then run E2E test
         env:
           DATABASE_URL: postgresql://inference:inference_local_password@127.0.0.1:5432/inference
