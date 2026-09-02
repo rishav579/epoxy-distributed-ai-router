@@ -89,8 +89,8 @@ resource "aws_s3_bucket_policy" "ml_artifacts" {
 
 data "aws_iam_policy_document" "ml_artifacts_policy" {
   statement {
-    sid       = "DenyInsecureTransport"
-    effect    = "Deny"
+    sid    = "DenyInsecureTransport"
+    effect = "Deny"
     principals {
       type        = "*"
       identifiers = ["*"]
@@ -103,4 +103,82 @@ data "aws_iam_policy_document" "ml_artifacts_policy" {
       values   = ["false"]
     }
   }
+}
+
+# --- GitHub Actions OIDC & CI/CD Deployment Role ---
+
+resource "aws_iam_openid_connect_provider" "github" {
+  count           = var.create_github_oidc_provider ? 1 : 0
+  url             = "https://token.actions.githubusercontent.com"
+  client_id_list  = ["sts.amazonaws.com"]
+  thumbprint_list = ["6938fd4d98bab03faadb97b34396831e3780aea1", "1c58779c0f5f8797a98118410872c2d773f70ee4"]
+  tags            = local.common_tags
+}
+
+locals {
+  github_oidc_provider_arn = var.create_github_oidc_provider ? aws_iam_openid_connect_provider.github[0].arn : "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/token.actions.githubusercontent.com"
+}
+
+data "aws_iam_policy_document" "github_actions_assume_role" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    principals {
+      type        = "Federated"
+      identifiers = [local.github_oidc_provider_arn]
+    }
+    condition {
+      test     = "StringEquals"
+      variable = "token.actions.githubusercontent.com:aud"
+      values   = ["sts.amazonaws.com"]
+    }
+    condition {
+      test     = "StringLike"
+      variable = "token.actions.githubusercontent.com:sub"
+      values   = ["repo:${var.github_actions_repo}:*"]
+    }
+  }
+}
+
+resource "aws_iam_role" "github_actions" {
+  name               = "${var.name}-github-actions-deploy"
+  assume_role_policy = data.aws_iam_policy_document.github_actions_assume_role.json
+  tags               = local.common_tags
+}
+
+data "aws_iam_policy_document" "github_actions_deploy" {
+  statement {
+    sid       = "EcrAuth"
+    effect    = "Allow"
+    actions   = ["ecr:GetAuthorizationToken"]
+    resources = ["*"]
+  }
+  statement {
+    sid    = "EcrOperations"
+    effect = "Allow"
+    actions = [
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:BatchGetImage",
+      "ecr:PutImage",
+      "ecr:InitiateLayerUpload",
+      "ecr:UploadLayerPart",
+      "ecr:CompleteLayerUpload",
+      "ecr:CreateRepository",
+      "ecr:DescribeRepositories",
+    ]
+    resources = ["arn:aws:ecr:${var.aws_region}:${data.aws_caller_identity.current.account_id}:repository/*"]
+  }
+  statement {
+    sid       = "EksDescribe"
+    effect    = "Allow"
+    actions   = ["eks:DescribeCluster"]
+    resources = [module.eks.cluster_arn]
+  }
+}
+
+resource "aws_iam_role_policy" "github_actions_deploy" {
+  name   = "github-actions-deploy-policy"
+  role   = aws_iam_role.github_actions.id
+  policy = data.aws_iam_policy_document.github_actions_deploy.json
 }

@@ -106,3 +106,15 @@ variable "tags" {
   description = "Additional tags applied to all taggable resources."
   default     = {}
 }
+
+variable "github_actions_repo" {
+  type        = string
+  description = "GitHub repository authorized for OIDC deployment in owner/repo format."
+  default     = "rishav579/epoxy-distributed-ai-router"
+}
+
+variable "create_github_oidc_provider" {
+  type        = bool
+  description = "Whether to create the GitHub Actions OIDC provider (set to false if already present in AWS account)."
+  default     = true
+}

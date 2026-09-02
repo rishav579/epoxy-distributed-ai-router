@@ -17,11 +17,10 @@ terraform {
   #   -backend-config="key=semantic-router/prod/terraform.tfstate" \
   #   -backend-config="region=<region>"
   backend "s3" {
-    encrypt        = true
-    use_lockfile   = true
-    bucket         = "REPLACE_WITH_TF_STATE_BUCKET"
-    key            = "semantic-router/terraform.tfstate"
-    region         = "us-east-1"
+    encrypt      = true
+    use_lockfile = true
+    key          = "semantic-router/terraform.tfstate"
+    region       = "us-east-1"
   }
 }
 
@@ -31,6 +30,8 @@ provider "aws" {
     tags = merge({ Project = var.name, Environment = var.environment, ManagedBy = "terraform" }, var.tags)
   }
 }
+
+data "aws_caller_identity" "current" {}
 
 resource "random_id" "final_snapshot" {
   byte_length = 4

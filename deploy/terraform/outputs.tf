@@ -40,3 +40,8 @@ output "worker_s3_prefixes" {
     mlflow = "s3://${aws_s3_bucket.ml_artifacts.bucket}/mlflow/"
   }
 }
+
+output "github_actions_role_arn" {
+  description = "ARN of the IAM role to configure in GitHub repository secrets as AWS_GITHUB_ACTIONS_ROLE_ARN."
+  value       = aws_iam_role.github_actions.arn
+}
