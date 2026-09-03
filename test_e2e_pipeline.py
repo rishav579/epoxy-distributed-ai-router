@@ -61,10 +61,24 @@ async def queue_message_count(client: httpx.AsyncClient, settings: Settings, que
         auth=httpx.BasicAuth(settings.rabbitmq_user, settings.rabbitmq_password),
     )
     payload = object_json(response)
-    count = payload.get("messages")
-    if not isinstance(count, int):
-        raise AssertionError(f"RabbitMQ did not return a message count: {payload}")
-    return count
+
+    if "messages" in payload:
+        count = payload["messages"]
+    elif "messages_ready" in payload:
+        count = payload["messages_ready"]
+    else:
+        count = 0
+
+    if isinstance(count, bool):
+        raise AssertionError(f"RabbitMQ returned invalid message count: {payload}")
+
+    if isinstance(count, int):
+        return count
+
+    if isinstance(count, float):
+        return int(count)
+
+    raise AssertionError(f"RabbitMQ did not return a valid message count: {payload}")
 
 
 async def publish_poison_message(client: httpx.AsyncClient, settings: Settings, index: int) -> None:

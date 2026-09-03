@@ -8,8 +8,8 @@ ENV VIRTUAL_ENV=/opt/venv \
 
 RUN python -m venv "$VIRTUAL_ENV"
 COPY requirements-worker.txt /tmp/requirements-worker.txt
-RUN pip install --only-binary=:all: -r /tmp/requirements-worker.txt \
- && pip install --index-url https://download.pytorch.org/whl/cpu torch==2.5.1+cpu
+RUN pip install --index-url https://download.pytorch.org/whl/cpu torch==2.5.1+cpu \
+ && pip install --only-binary=:all: -r /tmp/requirements-worker.txt
 
 FROM python:3.11-slim AS runtime
 
@@ -27,6 +27,7 @@ RUN groupadd --gid 10001 app \
 
 COPY --from=builder /opt/venv /opt/venv
 COPY --chown=app:app inference_worker.py /app/inference_worker.py
+COPY --chown=app:app router_engine.py /app/router_engine.py
 
 WORKDIR /app
 USER 10001:10001
