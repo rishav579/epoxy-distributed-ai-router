@@ -3,6 +3,7 @@ name: production-deploy
 on:
   push:
     branches: [main]
+  workflow_dispatch: {}
 
 permissions:
   contents: read
@@ -95,6 +96,7 @@ jobs:
   build-and-push:
     name: Build and push images
     needs: test
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
     permissions:
       id-token: write
@@ -131,6 +133,7 @@ jobs:
   deploy:
     name: Deploy to EKS
     needs: build-and-push
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
     permissions:
       contents: read
